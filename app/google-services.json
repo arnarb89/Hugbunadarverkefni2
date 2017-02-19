@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "520877128073",
+    "firebase_url": "https://cloudmessagingtest2-246fb.firebaseio.com",
+    "project_id": "cloudmessagingtest2-246fb",
+    "storage_bucket": "cloudmessagingtest2-246fb.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:520877128073:android:b6f64f5291b5dbf3",
+        "android_client_info": {
+          "package_name": "testcompany.cloudmessagingtest2"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "520877128073-k5ilg861mqsuifaee82qmmchdhquk8hb.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBCg-0Mbz3lnKGWpvbriITetsnc5eWBYlU"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "520877128073-k5ilg861mqsuifaee82qmmchdhquk8hb.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
