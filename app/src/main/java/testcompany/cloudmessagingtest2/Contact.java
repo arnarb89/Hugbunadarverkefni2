@@ -1,15 +1,11 @@
 package testcompany.cloudmessagingtest2;
 
-/**
- * Created by arnardesktop on 4.3.2017.
- */
-
 public class Contact {
     private boolean isBlocked;
     private int id;
     private String username;
 
-    Contact(boolean isBlocked, int id, String username){
+    Contact(int id, String username, boolean isBlocked){
         this.isBlocked = isBlocked;
         this.id = id;
         this.username = username;
