@@ -27,9 +27,10 @@ public class SignInActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_sign_in);
 
-        // try signing in using the LoginManager
+        Log.i("testing", "SignInActivity.onCreate()");
+//        setContentView(R.layout.activity_sign_in);
+
         loginManager = new LoginManager(SignInActivity.this);
         loginManager.signIn();
     }

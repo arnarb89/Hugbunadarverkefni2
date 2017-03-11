@@ -26,16 +26,16 @@ import java.util.Arrays;
 public class LoginManager {
     private static final String TAG = "LoginManager";
 
-    private FirebaseAuth mAuth;
+//    private FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener mAuthListener;
 
-    private AppCompatActivity mActivity;
+    private Activity mActivity;
 
     // Choose an arbitrary request code value
     private static final int RC_SIGN_IN = 123;
 
 
-    public LoginManager(AppCompatActivity activity) {
+    public LoginManager(Activity activity) {
         mActivity = activity;
     }
 
@@ -52,17 +52,16 @@ public class LoginManager {
     }
 
     public void signIn() {
-        mAuth = FirebaseAuth.getInstance();
+//        mAuth = FirebaseAuth.getInstance();
 //        mActivity = activity;
 
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         if (user != null) {
             // send user to recentConversation activity
 
-            Log.i("testing", "I'm already logged in");
+            Log.i("testing", "LoginManager.signIn(), I'm already logged in");
             // should be changed to RecentConversationsActivity
-            mActivity.startActivity(new Intent(mActivity, MainActivity.class));
-
+            mActivity.startActivity(new Intent(mActivity, RecentConversationsActivity.class));
             // User is signed in
             Log.d(TAG, "onAuthStateChanged:signed_in:" + user.getUid());
         } else {
@@ -80,7 +79,7 @@ public class LoginManager {
         }
     }
 
-    protected void handleSignResult(int requestCode, int resultCode, Intent data) {
+    public void handleSignResult(int requestCode, int resultCode, Intent data) {
 //        mActivity.super.onActivityResult(requestCode, resultCode, data);
         // RC_SIGN_IN is the request code you passed into startActivityForResult(...) when starting the sign in flow.
         Log.i("testing", "Requestcode: "+requestCode+" ResultCode: "+resultCode);
@@ -91,7 +90,7 @@ public class LoginManager {
 
             // Successfully signed in
             if (resultCode == ResultCodes.OK) {
-                mActivity.startActivity(new Intent(mActivity, MainActivity.class)
+                mActivity.startActivity(new Intent(mActivity, RecentConversationsActivity.class)
                         .putExtra("google_token", response.getIdpToken()));
                 mActivity.finish();
                 return;
