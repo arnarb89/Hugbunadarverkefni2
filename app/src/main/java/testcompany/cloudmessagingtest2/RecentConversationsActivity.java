@@ -27,7 +27,7 @@ public class RecentConversationsActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_recentconversations2);
+        setContentView(R.layout.activity_recentconversations);
 
         listView = (ListView) findViewById(R.id.recentConversationsList);
         editText = (EditText) findViewById(R.id.btnSearchContacts);
