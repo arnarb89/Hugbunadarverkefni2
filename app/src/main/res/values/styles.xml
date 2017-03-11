@@ -4,8 +4,47 @@
     <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorPrimaryDark">@color/divider</item>
         <item name="colorAccent">@color/colorAccent</item>
+
+        <item name="android:popupMenuStyle">@style/BlockOrRemovePopupMenu</item>
+        <item name="popupMenuStyle">@style/BlockOrRemovePopupMenu</item>
+
+        <item name="textAppearanceLargePopupMenu">@style/BlockOrRemovePopupMenu</item>
+        <item name="android:textAppearanceLargePopupMenu">@style/BlockOrRemovePopupMenu</item>
+
+        <item name="textAppearanceSmallPopupMenu">@style/BlockOrRemovePopupMenu</item>
+        <item name="android:textAppearanceSmallPopupMenu">@style/BlockOrRemovePopupMenu</item>
     </style>
+
+    <!-- Application theme. -->
+    <style name="FireTextNoTitleBar" parent="AppTheme">
+        <item name="android:windowActionBar">false</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:background">@color/black</item>
+        <item name="android:windowBackground">@color/colorPrimaryDark</item>
+        <item name="android:colorBackground">@color/black</item>
+        <item name="android:textColorHint">@color/textAntiAccent</item>
+
+        <item name="android:popupMenuStyle">@style/BlockOrRemovePopupMenu</item>
+        <item name="popupMenuStyle">@style/BlockOrRemovePopupMenu</item>
+
+        <item name="textAppearanceLargePopupMenu">@style/BlockOrRemovePopupMenu</item>
+        <item name="android:textAppearanceLargePopupMenu">@style/BlockOrRemovePopupMenu</item>
+
+        <item name="textAppearanceSmallPopupMenu">@style/BlockOrRemovePopupMenu</item>
+        <item name="android:textAppearanceSmallPopupMenu">@style/BlockOrRemovePopupMenu</item>
+    </style>
+
+    <style name="BlockOrRemovePopupMenu" parent="Widget.AppCompat.PopupMenu.Overflow">
+        <item name="android:background">@color/white</item>
+        <item name="android:windowBackground">@color/white</item>
+        <item name="android:colorBackground">@color/white</item>
+        <item name="android:popupBackground">@color/white</item>
+        <item name="android:textColor">@color/orange</item>
+        <item name="android:textSize">15dip</item>
+    </style>
+
+
 
 </resources>
