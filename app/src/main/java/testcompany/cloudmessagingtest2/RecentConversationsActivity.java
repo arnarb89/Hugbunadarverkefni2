@@ -132,7 +132,7 @@ public class RecentConversationsActivity extends Activity {
         newFriendsButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent myIntent = new Intent(RecentConversationsActivity.this, RecentConversationsActivity.class); // TODO: vantar að breyta seinna viðfanginu í NewFriendsActivity
+                Intent myIntent = new Intent(RecentConversationsActivity.this, NewFriendsActivity.class); // TODO: vantar að breyta seinna viðfanginu í NewFriendsActivity
                 Toast.makeText(getApplicationContext(), "Opening NewFriendsActivity.", Toast. LENGTH_SHORT).show();
                 RecentConversationsActivity.this.startActivity(myIntent);
             }

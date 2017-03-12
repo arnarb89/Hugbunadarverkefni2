@@ -34,7 +34,7 @@ public class RecentConversationsAdapter extends BaseAdapter {
     @Override
     public Object getItem(int position) {
 
-        return position;
+        return data[position];
     }
 
     @Override
@@ -47,7 +47,7 @@ public class RecentConversationsAdapter extends BaseAdapter {
     public View getView(int position, View convertView, ViewGroup parent) {
         Object[] thisData = (Object[]) data[position];
 
-        convertView= layoutInflater.inflate(R.layout.recent_conversations_list_item, null);
+        convertView= layoutInflater.inflate(R.layout.recent_conversations_list_item, parent, false);
 
         TextView nameView=(TextView)convertView.findViewById(R.id.nameField);
         nameView.setText((String)thisData[0]);
