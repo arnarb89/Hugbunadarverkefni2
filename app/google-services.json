@@ -15,11 +15,11 @@
       },
       "oauth_client": [
         {
-          "client_id": "520877128073-n3e4te7p0i2hbo8cs8eur5kbg016o2bp.apps.googleusercontent.com",
+          "client_id": "520877128073-jnjl0n229npeff7jv0safiq6ivqkflki.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "testcompany.cloudmessagingtest2",
-            "certificate_hash": "715e94d7af70053adf2b52a03546796102ddf29e"
+            "certificate_hash": "a79b87b81d20b6fa8b23a9e9a42dded979200f18"
           }
         },
         {
