@@ -18,12 +18,8 @@
         <activity
             android:name=".RecentConversationsActivity"
             android:theme="@style/FireTextNoTitleBar">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
+
 
         <service android:name=".MyFirebaseInstanceIDService">
             <intent-filter>
@@ -36,7 +32,17 @@
             </intent-filter>
         </service>
 
-        <activity android:name=".NewFriendsActivity"></activity>
+        <activity android:name=".NewFriendsActivity">
+        </activity>
+      
+        <activity android:name=".SignInActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+      
     </application>
 
 </manifest>

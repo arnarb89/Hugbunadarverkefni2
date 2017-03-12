@@ -3,6 +3,7 @@ package testcompany.cloudmessagingtest2;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
@@ -14,6 +15,8 @@ import android.widget.PopupMenu;
 import android.widget.Toast;
 
 public class RecentConversationsActivity extends Activity {
+
+    LoginManager loginManager;
 
     ListView listView;
     EditText editText;
@@ -28,6 +31,8 @@ public class RecentConversationsActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recentconversations);
+
+        Log.i("testing", "RecentConversationsActivity.onCreate()");
 
         listView = (ListView) findViewById(R.id.recentConversationsList);
         editText = (EditText) findViewById(R.id.btnSearchContacts);
@@ -145,9 +150,11 @@ public class RecentConversationsActivity extends Activity {
         signOutButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent myIntent = new Intent(RecentConversationsActivity.this, RecentConversationsActivity.class); // TODO: vantar að breyta þessu yfir í sign out
-                Toast.makeText(getApplicationContext(), "Pretending to sign out.", Toast. LENGTH_SHORT).show();
-                RecentConversationsActivity.this.startActivity(myIntent);
+                loginManager = new LoginManager(RecentConversationsActivity.this);
+                loginManager.signOut();
+//                Intent myIntent = new Intent(RecentConversationsActivity.this, RecentConversationsActivity.class); // TODO: vantar að breyta þessu yfir í sign out
+//                Toast.makeText(getApplicationContext(), "Pretending to sign out.", Toast. LENGTH_SHORT).show();
+//                RecentConversationsActivity.this.startActivity(myIntent);
             }
         });
     }
