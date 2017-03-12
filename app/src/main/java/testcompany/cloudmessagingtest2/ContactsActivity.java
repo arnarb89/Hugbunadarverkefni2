@@ -142,7 +142,7 @@ public class ContactsActivity extends Activity {
         blockedListButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent myIntent = new Intent(ContactsActivity.this, ContactsActivity.class); // TODO: vantar að breyta seinna viðfanginu í BlockedContactsActivity
+                Intent myIntent = new Intent(ContactsActivity.this, BlockedContactsActivity.class); // TODO: vantar að breyta seinna viðfanginu í BlockedContactsActivity
                 Toast.makeText(getApplicationContext(), "Opening BlockedContactsActivity.", Toast. LENGTH_SHORT).show();
                 ContactsActivity.this.startActivity(myIntent);
             }
