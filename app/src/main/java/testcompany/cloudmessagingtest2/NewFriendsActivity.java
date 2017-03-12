@@ -13,6 +13,8 @@ import android.widget.Toast;
 
 public class NewFriendsActivity extends Activity {
 
+    LoginManager loginManager;
+
     ListView listView;
     EditText editText;
 
@@ -91,7 +93,7 @@ public class NewFriendsActivity extends Activity {
         contactsButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent myIntent = new Intent(NewFriendsActivity.this, RecentConversationsActivity.class); // TODO: vantar að breyta seinna viðfanginu í ContactsActivity
+                Intent myIntent = new Intent(NewFriendsActivity.this, ContactsActivity.class); // TODO: vantar að breyta seinna viðfanginu í ContactsActivity
                 Toast.makeText(getApplicationContext(), "Opening Contacts Activity.", Toast. LENGTH_SHORT).show();
                 NewFriendsActivity.this.startActivity(myIntent);
             }
@@ -118,9 +120,11 @@ public class NewFriendsActivity extends Activity {
         signOutButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent myIntent = new Intent(NewFriendsActivity.this, RecentConversationsActivity.class); // TODO: vantar að breyta þessu yfir í sign out
-                Toast.makeText(getApplicationContext(), "Pretending to sign out.", Toast. LENGTH_SHORT).show();
-                NewFriendsActivity.this.startActivity(myIntent);
+                loginManager = new LoginManager(NewFriendsActivity.this);
+                loginManager.signOut();
+//                Intent myIntent = new Intent(RecentConversationsActivity.this, RecentConversationsActivity.class); // TODO: vantar að breyta þessu yfir í sign out
+//                Toast.makeText(getApplicationContext(), "Pretending to sign out.", Toast. LENGTH_SHORT).show();
+//                RecentConversationsActivity.this.startActivity(myIntent);
             }
         });
 
