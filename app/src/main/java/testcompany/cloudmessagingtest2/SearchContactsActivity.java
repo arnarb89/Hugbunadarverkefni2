@@ -3,6 +3,8 @@ package testcompany.cloudmessagingtest2;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
@@ -13,7 +15,7 @@ import android.widget.ListView;
 import android.widget.PopupMenu;
 import android.widget.Toast;
 
-public class ContactsActivity extends Activity {
+public class SearchContactsActivity extends Activity {
 
     LoginManager loginManager;
 
@@ -29,9 +31,9 @@ public class ContactsActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_contacts);
+        setContentView(R.layout.activity_search_contacts);
 
-        listView = (ListView) findViewById(R.id.contactsList);
+        listView = (ListView) findViewById(R.id.searchContactsResultsListView);
         editText = (EditText) findViewById(R.id.btnSearchContacts);
 
         recentConversationsButton = (Button) findViewById(R.id.btnRecentConversations);
@@ -39,7 +41,6 @@ public class ContactsActivity extends Activity {
         newFriendsButton = (Button) findViewById(R.id.btnNewContacts);
         blockedListButton = (Button) findViewById(R.id.btnBlockedContacts);
         signOutButton = (Button) findViewById(R.id.btnSignOut);
-
 
         // TODO: dummy test data, can delete after more of the project is finished
         final Object[] theData = new Object[]{
@@ -55,6 +56,21 @@ public class ContactsActivity extends Activity {
                 new Object[]{"Auddi"} ,
                 new Object[]{"Sveppi"}
         };
+
+        editText.addTextChangedListener(new TextWatcher() {
+
+            public void afterTextChanged(Editable s) {}
+
+            public void beforeTextChanged(CharSequence s, int start,
+                                          int count, int after) {
+            }
+
+            public void onTextChanged(CharSequence s, int start,
+                                      int before, int count) {
+                Toast.makeText(getApplicationContext(), "Search Contacts text has changed.", Toast. LENGTH_SHORT).show(); //TODO: needs to query the DB
+            }
+        });
+
 
         // Populate Recent Conversations list with items
         ContactsListAdapter contactsListAdapter = new ContactsListAdapter(theData, this.getBaseContext());
@@ -74,12 +90,13 @@ public class ContactsActivity extends Activity {
                 Object[] thisData = (Object[]) theData[arg2];
                 Toast.makeText(getApplicationContext(), "You clicked "+(String)thisData[0]+"'s conversation. LONG PRESS.", Toast. LENGTH_SHORT).show();
 
-                PopupMenu popup = new PopupMenu(ContactsActivity.this, arg1, Gravity.RIGHT);
+
+                PopupMenu popup = new PopupMenu(SearchContactsActivity.this, arg1, Gravity.RIGHT);
                 popup.getMenuInflater().inflate(R.menu.block_or_remove_popupmenu, popup.getMenu());
 
                 popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
                     public boolean onMenuItemClick(MenuItem item) {
-                        Toast.makeText(ContactsActivity.this,"You Clicked : " + item.getTitle(),Toast.LENGTH_SHORT).show();
+                        Toast.makeText(SearchContactsActivity.this,"You Clicked : " + item.getTitle(),Toast.LENGTH_SHORT).show();
                         return true;
                     }
                 });
@@ -93,56 +110,46 @@ public class ContactsActivity extends Activity {
 
 
 
-
-
-        // Set Search Contacts to go to SearchContactsActivity
-        editText.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent myIntent = new Intent(ContactsActivity.this, SearchContactsActivity.class); // TODO: vantar að breyta seinna viðfanginu í SearchContactsActivity
-                Toast.makeText(getApplicationContext(), "Opening Search Contacts Activity.", Toast. LENGTH_SHORT).show();
-                ContactsActivity.this.startActivity(myIntent);
-            }
-        });
-
         recentConversationsButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent myIntent = new Intent(ContactsActivity.this, RecentConversationsActivity.class); // TODO: það á örugglega ekki að vera neitt onClick núna
-                Toast.makeText(getApplicationContext(), "This button should probably not do anything within this activity.", Toast. LENGTH_SHORT).show();
-                ContactsActivity.this.startActivity(myIntent);
+                Intent myIntent = new Intent(SearchContactsActivity.this, RecentConversationsActivity.class); // TODO: það á örugglega ekki að vera neitt onClick núna
+                Toast.makeText(getApplicationContext(), "Opening RecentConversationsActivity.", Toast. LENGTH_SHORT).show();
+                SearchContactsActivity.this.startActivity(myIntent);
             }
         });
 
-        /*contactsButton.setOnClickListener(new View.OnClickListener() {
+        contactsButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Intent myIntent = new Intent(SearchContactsActivity.this, ContactsActivity.class); // TODO: það á örugglega ekki að vera neitt onClick núna
                 Toast.makeText(getApplicationContext(), "Opening Contacts Activity.", Toast. LENGTH_SHORT).show();
+                SearchContactsActivity.this.startActivity(myIntent);
             }
-        });*/
+        });
 
         newFriendsButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent myIntent = new Intent(ContactsActivity.this, NewFriendsActivity.class); // TODO: vantar að breyta seinna viðfanginu í NewFriendsActivity
+                Intent myIntent = new Intent(SearchContactsActivity.this, NewFriendsActivity.class); // TODO: vantar að breyta seinna viðfanginu í NewFriendsActivity
                 Toast.makeText(getApplicationContext(), "Opening NewFriendsActivity.", Toast. LENGTH_SHORT).show();
-                ContactsActivity.this.startActivity(myIntent);
+                SearchContactsActivity.this.startActivity(myIntent);
             }
         });
 
         blockedListButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent myIntent = new Intent(ContactsActivity.this, BlockedContactsActivity.class); // TODO: vantar að breyta seinna viðfanginu í BlockedContactsActivity
+                Intent myIntent = new Intent(SearchContactsActivity.this, BlockedContactsActivity.class); // TODO: vantar að breyta seinna viðfanginu í BlockedContactsActivity
                 Toast.makeText(getApplicationContext(), "Opening BlockedContactsActivity.", Toast. LENGTH_SHORT).show();
-                ContactsActivity.this.startActivity(myIntent);
+                SearchContactsActivity.this.startActivity(myIntent);
             }
         });
 
         signOutButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                loginManager = new LoginManager(ContactsActivity.this);
+                loginManager = new LoginManager(SearchContactsActivity.this);
                 loginManager.signOut();
             }
         });

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout  xmlns:android="http://schemas.android.com/apk/res/android"
 xmlns:tools="http://schemas.android.com/tools"
-android:id="@+id/activity_contacts"
+android:id="@+id/activity_search_contacts"
 android:layout_width="fill_parent"
 android:layout_height="match_parent"
 android:paddingBottom="16dip"
@@ -9,15 +9,12 @@ android:paddingLeft="16dip"
 android:paddingRight="16dip"
 android:paddingTop="16dip"
 android:orientation="vertical"
-tools:context="testcompany.cloudmessagingtest2.ContactsActivity"
-android:focusable="true"
-android:focusableInTouchMode="true"
+tools:context="testcompany.cloudmessagingtest2.SearchContactsActivity"
     >
     <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="50dp"
         android:orientation="horizontal">
-
 
         <Button android:id="@+id/btnRecentConversations"
             android:textColor="@color/menubuttoncolor"
@@ -36,13 +33,13 @@ android:focusableInTouchMode="true"
         </Space>
 
         <Button android:id="@+id/btnContacts"
-            android:textColor="@color/blue"
+            android:textColor="@color/menubuttoncolor"
             android:textSize="9dip"
             android:padding="0dip"
             android:layout_width="55dip"
             android:layout_height="match_parent"
             android:text="Contacts"
-            android:background="@drawable/menu_button_selected"/>
+            android:background="@drawable/menu_button"/>
 
         <Space
             android:layout_width="0dp"
@@ -96,20 +93,22 @@ android:focusableInTouchMode="true"
 
 
     <EditText
-        android:focusable="false"
+        android:textColor="@color/white"
+        android:textSize="18dip"
+
         android:gravity="left|center_vertical"
-        android:paddingLeft="12dip"
         android:layout_marginTop="10dip"
         android:layout_marginBottom="10dip"
+        android:paddingLeft="10dip"
         android:id="@+id/btnSearchContacts"
         android:layout_width="fill_parent"
         android:layout_height="50dip"
         android:hint="Find a contact"
         android:inputType="text"
-        android:background="@drawable/searchbar"/>
+        android:background="@drawable/searchbar_selected"/>
 
     <ListView
-        android:id="@+id/contactsList"
+        android:id="@+id/searchContactsResultsListView"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:divider="@color/divider"

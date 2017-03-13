@@ -4,10 +4,13 @@
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
     <color name="black">#000000</color>
+    <color name="green">#22cc00</color>
     <color name="red">#ff0000</color>
+    <color name="darkgreen">#199600</color>
+    <color name="darkred">#bf0000</color>
     <color name="blue">#4271f4</color>
     <color name="white">#ffffff</color>
-    <color name="orange">#FFA500</color>
+    <color name="orange">#e09100</color>
     <color name="listitemselected">#2d2d2d</color>
     <color name="transparent">#00000000</color>
     <color name="textAntiAccent">#777777</color>

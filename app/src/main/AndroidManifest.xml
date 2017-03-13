@@ -39,7 +39,8 @@
             </intent-filter>
         </activity>
         <activity android:name=".ContactsActivity" />
-        <activity android:name=".BlockedContactsActivity"></activity>
+        <activity android:name=".BlockedContactsActivity" />
+        <activity android:name=".SearchContactsActivity"></activity>
     </application>
 
 </manifest>
