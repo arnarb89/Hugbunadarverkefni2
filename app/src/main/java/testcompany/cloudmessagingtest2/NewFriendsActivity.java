@@ -75,7 +75,7 @@ public class NewFriendsActivity extends Activity {
         editText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent myIntent = new Intent(NewFriendsActivity.this, RecentConversationsActivity.class); // TODO: vantar að breyta seinna viðfanginu í SearchContactsActivity
+                Intent myIntent = new Intent(NewFriendsActivity.this, SearchContactsActivity.class); // TODO: vantar að breyta seinna viðfanginu í SearchContactsActivity
                 Toast.makeText(getApplicationContext(), "Opening SearchContactsActivity.", Toast. LENGTH_SHORT).show();
                 NewFriendsActivity.this.startActivity(myIntent);
             }
@@ -99,14 +99,14 @@ public class NewFriendsActivity extends Activity {
             }
         });
 
-        newFriendsButton.setOnClickListener(new View.OnClickListener() {
+        /*newFriendsButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent myIntent = new Intent(NewFriendsActivity.this, NewFriendsActivity.class); // TODO: vantar að breyta seinna viðfanginu í NewFriendsActivity
                 Toast.makeText(getApplicationContext(), "Opening NewFriendsActivity.", Toast. LENGTH_SHORT).show();
                 NewFriendsActivity.this.startActivity(myIntent);
             }
-        });
+        });*/
 
         blockedListButton.setOnClickListener(new View.OnClickListener() {
             @Override

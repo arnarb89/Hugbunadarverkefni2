@@ -18,20 +18,15 @@
         android:layout_height="50dp"
         android:orientation="horizontal">
 
-        <Space
-            android:layout_width="0dp"
-            android:layout_height="1dp"
-            android:layout_weight="1" >
-        </Space>
 
         <Button android:id="@+id/btnRecentConversations"
-            android:textColor="@color/menubuttoncolor"
+            android:textColor="@color/blue"
             android:textSize="9dip"
             android:padding="0dip"
             android:layout_width="55dip"
             android:layout_height="match_parent"
             android:text="Recent"
-            android:background="@drawable/menu_button"/>
+            android:background="@drawable/menu_button_selected"/>
 
 
         <Space
@@ -94,11 +89,6 @@
             android:text="Sign Out"
             android:background="@drawable/menu_button"/>
 
-        <Space
-            android:layout_width="0dp"
-            android:layout_height="1dp"
-            android:layout_weight="1" >
-        </Space>
 
 
     </LinearLayout>
@@ -107,7 +97,8 @@
 
     <EditText
         android:focusable="false"
-        android:gravity="center"
+        android:gravity="left|center_vertical"
+        android:paddingLeft="12dip"
         android:layout_marginTop="10dip"
         android:layout_marginBottom="10dip"
         android:id="@+id/btnSearchContacts"

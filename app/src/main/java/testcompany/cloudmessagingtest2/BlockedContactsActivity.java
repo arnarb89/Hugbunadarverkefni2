@@ -88,7 +88,7 @@ public class BlockedContactsActivity extends Activity {
         editText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent myIntent = new Intent(BlockedContactsActivity.this, BlockedContactsActivity.class); // TODO: vantar að breyta seinna viðfanginu í SearchContactsActivity
+                Intent myIntent = new Intent(BlockedContactsActivity.this, SearchContactsActivity.class); // TODO: vantar að breyta seinna viðfanginu í SearchContactsActivity
                 Toast.makeText(getApplicationContext(), "Opening Search Contacts Activity.", Toast. LENGTH_SHORT).show();
                 BlockedContactsActivity.this.startActivity(myIntent);
             }
@@ -121,12 +121,12 @@ public class BlockedContactsActivity extends Activity {
             }
         });
 
-        blockedListButton.setOnClickListener(new View.OnClickListener() {
+        /*blockedListButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Toast.makeText(getApplicationContext(), "You are in BlockedContactsActivity.", Toast. LENGTH_SHORT).show();
             }
-        });
+        });*/
 
         signOutButton.setOnClickListener(new View.OnClickListener() {
             @Override
