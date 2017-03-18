@@ -40,7 +40,8 @@
         </activity>
         <activity android:name=".ContactsActivity" />
         <activity android:name=".BlockedContactsActivity" />
-        <activity android:name=".SearchContactsActivity"></activity>
+        <activity android:name=".SearchContactsActivity" />
+        <activity android:name=".ConversationActivity"></activity>
     </application>
 
 </manifest>

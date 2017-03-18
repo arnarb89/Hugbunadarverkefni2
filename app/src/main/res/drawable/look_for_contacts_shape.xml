@@ -17,6 +17,6 @@
 
     <stroke
         android:width="1dip"
-        android:color="@color/orange"/>
+        android:color="@color/searchbarUnselected"/>
 
 </shape>

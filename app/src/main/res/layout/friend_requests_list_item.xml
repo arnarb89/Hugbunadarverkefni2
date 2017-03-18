@@ -39,7 +39,7 @@
         android:background="@color/transparent">
 
         <Button android:id="@+id/acceptFriendRequestButton"
-            android:textColor="@color/menubuttoncolor"
+            android:textColor="@color/darkgreen"
             android:textSize="13dip"
 
             android:padding="0dip"
@@ -59,7 +59,7 @@
         </Space>
 
         <Button android:id="@+id/declineFriendRequestButton"
-            android:textColor="@color/menubuttoncolor"
+            android:textColor="@color/darkred"
             android:textSize="13dip"
 
             android:padding="0dip"

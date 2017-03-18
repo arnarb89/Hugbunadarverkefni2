@@ -66,7 +66,12 @@ public class RecentConversationsActivity extends Activity {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
                 Object[] thisData = (Object[]) theData[arg2];
-                Toast.makeText(getApplicationContext(), "You clicked "+(String)thisData[0]+"'s conversation. TAP.", Toast. LENGTH_SHORT).show();
+                //Toast.makeText(getApplicationContext(), "You clicked "+(String)thisData[0]+"'s conversation. TAP.", Toast. LENGTH_SHORT).show();
+
+                Intent myIntent = new Intent(RecentConversationsActivity.this, ConversationActivity.class); // TODO: vantar að breyta seinna viðfanginu í ContactsActivity
+                Toast.makeText(getApplicationContext(), "Opening Conversation.", Toast. LENGTH_SHORT).show();
+                RecentConversationsActivity.this.startActivity(myIntent);
+
             }
         });
 

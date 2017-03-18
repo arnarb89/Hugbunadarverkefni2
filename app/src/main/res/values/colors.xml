@@ -16,6 +16,13 @@
     <color name="textAntiAccent">#777777</color>
     <color name="divider">#212121</color>
     <color name="menubuttoncolor">#d1d1d1</color>
+    <color name="conversationMessageFromYou">#137700</color>
+    <color name="conversationMessageToYou">#3d3d3d</color>
+    <color name="menuButtonUnselected">@color/darkgreen</color>
+    <color name="searchbarUnselected">@color/darkgreen</color>
+    <color name="header">@color/darkgreen</color>
+    <color name="menubuttonTextUnselected">@color/darkgreen</color>
+
 
 
 </resources>

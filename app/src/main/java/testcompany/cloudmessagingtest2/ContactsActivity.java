@@ -63,8 +63,11 @@ public class ContactsActivity extends Activity {
         // Set Tap onClick listener for list items
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
-                Object[] thisData = (Object[]) theData[arg2];
-                Toast.makeText(getApplicationContext(), "You clicked "+(String)thisData[0]+"'s conversation. TAP.", Toast. LENGTH_SHORT).show();
+                //Object[] thisData = (Object[]) theData[arg2];
+
+                Intent myIntent = new Intent(ContactsActivity.this, ConversationActivity.class);
+                ContactsActivity.this.startActivity(myIntent);
+
             }
         });
 
