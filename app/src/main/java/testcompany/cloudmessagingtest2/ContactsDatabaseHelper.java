@@ -196,7 +196,7 @@ public class ContactsDatabaseHelper extends SQLiteOpenHelper {
     }
 
     public void unblockContact(Contact contact) {
-        updateBlocked(contact, true);
+        updateBlocked(contact, false);
     }
 
     private void updateBlocked(Contact contact, boolean blocked) {
