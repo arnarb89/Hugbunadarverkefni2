@@ -1,6 +1,7 @@
 package testcompany.cloudmessagingtest2;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
@@ -15,9 +16,12 @@ import android.widget.ListView;
 import android.widget.PopupMenu;
 import android.widget.Toast;
 
+import java.util.List;
+
 public class SearchContactsActivity extends Activity {
 
     LoginManager loginManager;
+    ContactsManager contactManager;
 
     ListView listView;
     EditText editText;
@@ -28,10 +32,16 @@ public class SearchContactsActivity extends Activity {
     Button blockedListButton;
     Button signOutButton;
 
+    Context context;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search_contacts);
+
+        context = this.getBaseContext();
+
+        contactManager = new ContactsManager(SearchContactsActivity.this);
 
         listView = (ListView) findViewById(R.id.searchContactsResultsListView);
         editText = (EditText) findViewById(R.id.btnSearchContacts);
@@ -42,76 +52,64 @@ public class SearchContactsActivity extends Activity {
         blockedListButton = (Button) findViewById(R.id.btnBlockedContacts);
         signOutButton = (Button) findViewById(R.id.btnSignOut);
 
-        // TODO: dummy test data, can delete after more of the project is finished
-        final Object[] theData = new Object[]{
-                new Object[]{"Arnar"},
-                new Object[]{"Haukur"} ,
-                new Object[]{"Simon"},
-                new Object[]{"Jonni"} ,
-                new Object[]{"Baddi"},
-                new Object[]{"Kári"} ,
-                new Object[]{"Lárus"},
-                new Object[]{"Tómas"} ,
-                new Object[]{"Indriði"},
-                new Object[]{"Auddi"} ,
-                new Object[]{"Sveppi"}
-        };
+
 
         editText.addTextChangedListener(new TextWatcher() {
 
             public void afterTextChanged(Editable s) {}
 
-            public void beforeTextChanged(CharSequence s, int start,
-                                          int count, int after) {
-            }
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
 
             public void onTextChanged(CharSequence s, int start,
                                       int before, int count) {
-                Toast.makeText(getApplicationContext(), "Search Contacts text has changed.", Toast. LENGTH_SHORT).show(); //TODO: needs to query the DB
-            }
-        });
 
+                final List<Contact> contactListData = contactManager.searchContacts(s.toString());
+                ContactsListAdapter contactsListAdapter = new ContactsListAdapter(contactListData, context);
+                ListView listView = listView = (ListView) findViewById(R.id.searchContactsResultsListView);
+                listView.setAdapter(contactsListAdapter);
 
-        // Populate Recent Conversations list with items
-        ContactsListAdapter contactsListAdapter = new ContactsListAdapter(theData, this.getBaseContext());
-        listView.setAdapter(contactsListAdapter);
+                // Set Tap onClick listener for list items
+                listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                    public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
+                        final int position = arg2;
 
-        // Set Tap onClick listener for list items
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
-                //Object[] thisData = (Object[]) theData[arg2];
-
-                Intent myIntent = new Intent(SearchContactsActivity.this, ConversationActivity.class);
-                SearchContactsActivity.this.startActivity(myIntent);
-            }
-        });
-
-        // Set Long Press onClick listener for list items
-        listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
-            public boolean onItemLongClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
-                Object[] thisData = (Object[]) theData[arg2];
-                Toast.makeText(getApplicationContext(), "You clicked "+(String)thisData[0]+"'s conversation. LONG PRESS.", Toast. LENGTH_SHORT).show();
-
-
-                PopupMenu popup = new PopupMenu(SearchContactsActivity.this, arg1, Gravity.RIGHT);
-                popup.getMenuInflater().inflate(R.menu.block_or_remove_popupmenu, popup.getMenu());
-
-                popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-                    public boolean onMenuItemClick(MenuItem item) {
-                        Toast.makeText(SearchContactsActivity.this,"You Clicked : " + item.getTitle(),Toast.LENGTH_SHORT).show();
-                        return true;
+                        Intent myIntent = new Intent(SearchContactsActivity.this, ConversationActivity.class);
+                        myIntent.putExtra("KEY_contactId", contactListData.get(position).getId());
+                        SearchContactsActivity.this.startActivity(myIntent);
                     }
                 });
 
-                popup.show();
-                return true;
+                // Set Long Press onClick listener for list items
+                listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+                    public boolean onItemLongClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
+                        final int position = arg2;
+
+                        PopupMenu popup = new PopupMenu(SearchContactsActivity.this, arg1, Gravity.RIGHT);
+                        popup.getMenuInflater().inflate(R.menu.block_or_remove_popupmenu, popup.getMenu());
+
+                        popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                            public boolean onMenuItemClick(MenuItem item) {
+                                if(item.getItemId()==R.id.block_contact){
+                                    contactManager.blockContact(contactListData.get(position));
+                                }else{
+                                    contactManager.deleteContact(contactListData.get(position));
+                                }
+                                return true;
+                            }
+                        });
+
+                        popup.show();
+                        return true;
+
+                    }
+                });
 
             }
         });
 
 
 
-
+        // set listeners for menu tab buttons
         recentConversationsButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

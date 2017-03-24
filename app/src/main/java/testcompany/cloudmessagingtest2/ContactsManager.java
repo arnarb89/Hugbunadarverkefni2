@@ -2,13 +2,8 @@ package testcompany.cloudmessagingtest2;
 
 import android.content.Context;
 
-import com.android.volley.Request;
 import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
-
-import org.json.JSONObject;
 
 import java.util.List;
 
@@ -47,6 +42,7 @@ public class ContactsManager {
 //                                        );
 //        mRequestQueue.add(jsonRequest);
 //    }
+    public List<Contact> getRequests() { return mDbHelper.getRequests(); }
 
     public Contact getContactById(int userid) {
         return mDbHelper.getContact(userid);

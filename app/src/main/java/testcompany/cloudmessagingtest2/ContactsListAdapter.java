@@ -7,18 +7,20 @@ package testcompany.cloudmessagingtest2;
         import android.widget.BaseAdapter;
         import android.widget.TextView;
 
+        import java.util.List;
+
 /**
  * Created by arnardesktop on 5.3.2017.
  */
 
 public class ContactsListAdapter extends BaseAdapter {
 
-    Object[] data;
+    List<Contact> data;
     Context context;
 
     LayoutInflater layoutInflater;
 
-    public ContactsListAdapter(Object[] data, Context context) {
+    public ContactsListAdapter(List<Contact> data, Context context) {
         super();
         this.data = data;
         this.context = context;
@@ -28,13 +30,13 @@ public class ContactsListAdapter extends BaseAdapter {
     @Override
     public int getCount() {
 
-        return data.length;
+        return data.size();
     }
 
     @Override
     public Object getItem(int position) {
 
-        return data[position];
+        return data.get(position);
     }
 
     @Override
@@ -45,12 +47,12 @@ public class ContactsListAdapter extends BaseAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        Object[] thisData = (Object[]) data[position];
+        Contact thisData = data.get(position);
 
         convertView= layoutInflater.inflate(R.layout.contacts_list_element, parent, false);
 
         TextView nameView=(TextView)convertView.findViewById(R.id.contactsListElementNameField);
-        nameView.setText((String)thisData[0]);
+        nameView.setText(thisData.getUsername());
 
         return convertView;
     }

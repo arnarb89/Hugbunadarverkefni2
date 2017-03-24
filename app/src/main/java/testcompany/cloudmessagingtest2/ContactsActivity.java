@@ -11,11 +11,13 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.PopupMenu;
-import android.widget.Toast;
+
+import java.util.List;
 
 public class ContactsActivity extends Activity {
 
     LoginManager loginManager;
+    ContactsManager contactManager;
 
     ListView listView;
     EditText editText;
@@ -31,6 +33,8 @@ public class ContactsActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_contacts);
 
+        contactManager = new ContactsManager(ContactsActivity.this);
+
         listView = (ListView) findViewById(R.id.contactsList);
         editText = (EditText) findViewById(R.id.btnSearchContacts);
 
@@ -40,49 +44,43 @@ public class ContactsActivity extends Activity {
         blockedListButton = (Button) findViewById(R.id.btnBlockedContacts);
         signOutButton = (Button) findViewById(R.id.btnSignOut);
 
+        final List<Contact> contactListData = contactManager.getNonBlockedContacts();
 
-        // TODO: dummy test data, can delete after more of the project is finished
-        final Object[] theData = new Object[]{
-                new Object[]{"Arnar"},
-                new Object[]{"Haukur"} ,
-                new Object[]{"Simon"},
-                new Object[]{"Jonni"} ,
-                new Object[]{"Baddi"},
-                new Object[]{"Kári"} ,
-                new Object[]{"Lárus"},
-                new Object[]{"Tómas"} ,
-                new Object[]{"Indriði"},
-                new Object[]{"Auddi"} ,
-                new Object[]{"Sveppi"}
-        };
 
-        // Populate Recent Conversations list with items
-        ContactsListAdapter contactsListAdapter = new ContactsListAdapter(theData, this.getBaseContext());
+        // Populate contact list with items
+        ContactsListAdapter contactsListAdapter;
+        contactsListAdapter = new ContactsListAdapter(contactListData, this.getBaseContext());
         listView.setAdapter(contactsListAdapter);
 
-        // Set Tap onClick listener for list items
+        // Set Tap onClick listener for Contact list
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
-                //Object[] thisData = (Object[]) theData[arg2];
+                final int position = arg2;
 
                 Intent myIntent = new Intent(ContactsActivity.this, ConversationActivity.class);
+                myIntent.putExtra("KEY_contactId", contactListData.get(position).getId());
                 ContactsActivity.this.startActivity(myIntent);
 
             }
         });
 
-        // Set Long Press onClick listener for list items
+        // Set Long Press onClick listener for Contact list
         listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             public boolean onItemLongClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
-                Object[] thisData = (Object[]) theData[arg2];
-                Toast.makeText(getApplicationContext(), "You clicked "+(String)thisData[0]+"'s conversation. LONG PRESS.", Toast. LENGTH_SHORT).show();
+                final int position = arg2;
 
                 PopupMenu popup = new PopupMenu(ContactsActivity.this, arg1, Gravity.RIGHT);
                 popup.getMenuInflater().inflate(R.menu.block_or_remove_popupmenu, popup.getMenu());
 
                 popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
                     public boolean onMenuItemClick(MenuItem item) {
-                        Toast.makeText(ContactsActivity.this,"You Clicked : " + item.getTitle(),Toast.LENGTH_SHORT).show();
+
+                        if(item.getItemId()==R.id.block_contact){
+                            contactManager.blockContact(contactListData.get(position));
+                        }else{
+                            contactManager.deleteContact(contactListData.get(position));
+                        }
+
                         return true;
                     }
                 });
@@ -98,12 +96,10 @@ public class ContactsActivity extends Activity {
 
 
 
-        // Set Search Contacts to go to SearchContactsActivity
         editText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent myIntent = new Intent(ContactsActivity.this, SearchContactsActivity.class); // TODO: vantar að breyta seinna viðfanginu í SearchContactsActivity
-                Toast.makeText(getApplicationContext(), "Opening Search Contacts Activity.", Toast. LENGTH_SHORT).show();
+                Intent myIntent = new Intent(ContactsActivity.this, SearchContactsActivity.class);
                 ContactsActivity.this.startActivity(myIntent);
             }
         });
@@ -111,24 +107,15 @@ public class ContactsActivity extends Activity {
         recentConversationsButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent myIntent = new Intent(ContactsActivity.this, RecentConversationsActivity.class); // TODO: það á örugglega ekki að vera neitt onClick núna
-                Toast.makeText(getApplicationContext(), "This button should probably not do anything within this activity.", Toast. LENGTH_SHORT).show();
+                Intent myIntent = new Intent(ContactsActivity.this, RecentConversationsActivity.class);
                 ContactsActivity.this.startActivity(myIntent);
             }
         });
 
-        /*contactsButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(getApplicationContext(), "Opening Contacts Activity.", Toast. LENGTH_SHORT).show();
-            }
-        });*/
-
         newFriendsButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent myIntent = new Intent(ContactsActivity.this, NewFriendsActivity.class); // TODO: vantar að breyta seinna viðfanginu í NewFriendsActivity
-                Toast.makeText(getApplicationContext(), "Opening NewFriendsActivity.", Toast. LENGTH_SHORT).show();
+                Intent myIntent = new Intent(ContactsActivity.this, NewFriendsActivity.class);
                 ContactsActivity.this.startActivity(myIntent);
             }
         });
@@ -136,8 +123,7 @@ public class ContactsActivity extends Activity {
         blockedListButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent myIntent = new Intent(ContactsActivity.this, BlockedContactsActivity.class); // TODO: vantar að breyta seinna viðfanginu í BlockedContactsActivity
-                Toast.makeText(getApplicationContext(), "Opening BlockedContactsActivity.", Toast. LENGTH_SHORT).show();
+                Intent myIntent = new Intent(ContactsActivity.this, BlockedContactsActivity.class);
                 ContactsActivity.this.startActivity(myIntent);
             }
         });
