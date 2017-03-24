@@ -10,18 +10,20 @@ package testcompany.cloudmessagingtest2;
         import android.widget.BaseAdapter;
         import android.widget.TextView;
 
+        import java.util.List;
+
 /**
  * Created by arnardesktop on 5.3.2017.
  */
 
 public class ConversationAdapter extends BaseAdapter {
 
-    Object[] data;
+    List<Message> data;
     Context context;
 
     LayoutInflater layoutInflater;
 
-    public ConversationAdapter(Object[] data, Context context) {
+    public ConversationAdapter(List<Message> data, Context context) {
         super();
         this.data = data;
         this.context = context;
@@ -31,13 +33,13 @@ public class ConversationAdapter extends BaseAdapter {
     @Override
     public int getCount() {
 
-        return data.length;
+        return data.size();
     }
 
     @Override
     public Object getItem(int position) {
 
-        return data[position];
+        return data.get(position);
     }
 
     @Override
@@ -48,21 +50,21 @@ public class ConversationAdapter extends BaseAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        Object[] thisData = (Object[]) data[position];
+        Message thisData = data.get(position);
+        int yourId = 0; //TODO: need to get your ID
 
-        if((String)thisData[0]=="You"){
+        if(thisData.getSenderId()==yourId){
             convertView= layoutInflater.inflate(R.layout.conversation_you_list_item, parent, false);
         }else{
             convertView= layoutInflater.inflate(R.layout.conversation_to_you_list_item, parent, false);
         }
 
-        //convertView= layoutInflater.inflate(R.layout.recent_conversations_list_item, parent, false);
 
         TextView timeView=(TextView)convertView.findViewById(R.id.timeTextView);
-        timeView.setText((String)thisData[1]);
+        timeView.setText(thisData.getSentDate().toString());
 
         TextView messageView=(TextView)convertView.findViewById(R.id.messageTextView);
-        messageView.setText((String)thisData[2]);
+        messageView.setText(thisData.getContent());
 
 
 

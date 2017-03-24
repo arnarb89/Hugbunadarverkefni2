@@ -10,7 +10,8 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
+
+import java.util.List;
 
 /**
  * Created by arnardesktop on 5.3.2017.
@@ -18,12 +19,12 @@ import android.widget.Toast;
 
 public class NewFriendsRequestsAdapter extends BaseAdapter {
 
-    Object[] data;
+    List<Contact> data;
     Context context;
 
     LayoutInflater layoutInflater;
 
-    public NewFriendsRequestsAdapter(Object[] data, Context context) {
+    public NewFriendsRequestsAdapter(List<Contact> data, Context context) {
         super();
         this.data = data;
         this.context = context;
@@ -33,13 +34,13 @@ public class NewFriendsRequestsAdapter extends BaseAdapter {
     @Override
     public int getCount() {
 
-        return data.length;
+        return data.size();
     }
 
     @Override
     public Object getItem(int position) {
 
-        return data[position];
+        return data.get(position);
     }
 
     @Override
@@ -50,13 +51,13 @@ public class NewFriendsRequestsAdapter extends BaseAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-
-        Object[] thisData = (Object[]) data[position];
+        final int pos = position;
+        final Contact thisData =  data.get(position);
 
         convertView= layoutInflater.inflate(R.layout.friend_requests_list_item, parent, false);
 
         TextView nameView=(TextView)convertView.findViewById(R.id.friendRequestNameField);
-        nameView.setText((String)thisData[0]);
+        nameView.setText(thisData.getUsername());
 
         Button acceptFriendRequestButton = (Button) convertView.findViewById(R.id.acceptFriendRequestButton);
         Button declineFriendRequestButton = (Button) convertView.findViewById(R.id.declineFriendRequestButton);
@@ -65,14 +66,22 @@ public class NewFriendsRequestsAdapter extends BaseAdapter {
         acceptFriendRequestButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(context, "Accepting friend request.", Toast. LENGTH_SHORT).show();
+                ContactsManager contactManager = new ContactsManager(context);
+                contactManager.acceptRequest(thisData);
+
+                data.remove(pos);
+                notifyDataSetChanged();
             }
         });
 
         declineFriendRequestButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(context, "Declining friend request.", Toast. LENGTH_SHORT).show();
+                ContactsManager contactManager = new ContactsManager(context);
+                contactManager.declineRequest(thisData);
+
+                data.remove(pos);
+                notifyDataSetChanged();
             }
         });
 
