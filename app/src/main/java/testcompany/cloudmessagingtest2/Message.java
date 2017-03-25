@@ -13,7 +13,7 @@ public class Message {
     private Date mSentTime;
     private int messageId;
 
-    Message(String mTextContent, int mSenderId, int mReceiverId, Date mSentTime, int messageId  ){
+    Message(String mTextContent, int mSenderId, int mReceiverId, Date mSentTime, int messageId) {
         this.mTextContent = mTextContent;
         this.mSenderId = mSenderId;
         this.mReceiverId = mReceiverId;
