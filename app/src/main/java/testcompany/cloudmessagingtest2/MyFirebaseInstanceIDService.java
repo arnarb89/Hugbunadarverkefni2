@@ -23,6 +23,7 @@ public class MyFirebaseInstanceIDService extends FirebaseInstanceIdService {
         // Get updated InstanceID token.
         String refreshedToken = FirebaseInstanceId.getInstance().getToken();
         Log.d(TAG, "Refreshed token: " + refreshedToken);
+        Log.i("testing", "MyFirebaseInstanceIDService.onTokenRefresh(), firebaseDeviceToken: " + refreshedToken);
 
         // If you want to send messages to this application instance or
         // manage this apps subscriptions on the server side, send the
@@ -30,6 +31,7 @@ public class MyFirebaseInstanceIDService extends FirebaseInstanceIdService {
         sendRegistrationToServer(refreshedToken);
     }
     // [END refresh_token]
+
 
     /**
      * Persist token to third-party servers.
@@ -41,5 +43,12 @@ public class MyFirebaseInstanceIDService extends FirebaseInstanceIdService {
      */
     private void sendRegistrationToServer(String token) {
         // TODO: Implement this method to send token to your app server.
+        String firebaseIdToken;
+        if((firebaseIdToken = TokenManager.getFirebaseUserIdToken(this)) != null) {
+            // TODO: send the deviceIdToken to the server along with the firebaseIdToken or some other id (a userId we might have generated) to associate this device to this user
+
+
+        } // otherwise do nothing, since we have no way to associate this deviceIdToken with a user
+
     }
 }

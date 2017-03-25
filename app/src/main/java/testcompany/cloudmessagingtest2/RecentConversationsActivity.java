@@ -141,6 +141,7 @@ public class RecentConversationsActivity extends Activity {
             @Override
             public void onClick(View v) {
                 loginManager = new LoginManager(RecentConversationsActivity.this);
+                Log.i("testing", "RecentConversationsActivity, signOutButton.onClickListener.signOut()");
                 loginManager.signOut();
             }
         });

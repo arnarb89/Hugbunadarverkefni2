@@ -39,6 +39,6 @@ public class SignInActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
 
         // go to the "main" activity if sign in was successful
-        loginManager.handleSignResult(requestCode, resultCode, data);
+        loginManager.handleSignInResult(requestCode, resultCode, data);
     }
 }
