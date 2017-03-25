@@ -7,19 +7,24 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
+import java.util.List;
+
 /**
  * Created by arnardesktop on 5.3.2017.
  */
 
 public class RecentConversationsAdapter extends BaseAdapter {
 
-    Object[] data;
+    ContactsManager contactManager;
+
+    List<Message> data;
     Context context;
 
     LayoutInflater layoutInflater;
 
-    public RecentConversationsAdapter(Object[] data, Context context) {
+    public RecentConversationsAdapter(List<Message> data, Context context) {
         super();
+        contactManager = new ContactsManager(context);
         this.data = data;
         this.context = context;
         layoutInflater = LayoutInflater.from(context);
@@ -28,13 +33,13 @@ public class RecentConversationsAdapter extends BaseAdapter {
     @Override
     public int getCount() {
 
-        return data.length;
+        return data.size();
     }
 
     @Override
     public Object getItem(int position) {
 
-        return position;
+        return data.get(position);
     }
 
     @Override
@@ -45,18 +50,23 @@ public class RecentConversationsAdapter extends BaseAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        Object[] thisData = (Object[]) data[position];
+        Message thisData =  data.get(position);
+        int yourId = 0; //TODO: needs to get your ID
 
-        convertView= layoutInflater.inflate(R.layout.recent_conversations_list_item, null);
+        convertView= layoutInflater.inflate(R.layout.recent_conversations_list_item, parent, false);
 
         TextView nameView=(TextView)convertView.findViewById(R.id.nameField);
-        nameView.setText((String)thisData[0]);
+        if(thisData.getSenderId()==yourId){
+            nameView.setText(contactManager.getContactById(thisData.getReceiverId()).getUsername());
+        }else{
+            nameView.setText(contactManager.getContactById(thisData.getSenderId()).getUsername());
+        }
 
         TextView timeView=(TextView)convertView.findViewById(R.id.timeField);
-        timeView.setText((String)thisData[1]);
+        timeView.setText(thisData.getSentDate().toString());
 
         TextView messageView=(TextView)convertView.findViewById(R.id.messageField);
-        messageView.setText((String)thisData[0]+" says: "+(String)thisData[2]);
+        messageView.setText(contactManager.getContactById(thisData.getSenderId()).getUsername()+" says: "+thisData.getContent());
 
 
 

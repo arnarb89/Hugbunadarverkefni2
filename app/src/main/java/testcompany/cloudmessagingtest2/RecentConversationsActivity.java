@@ -3,7 +3,6 @@ package testcompany.cloudmessagingtest2;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
@@ -12,11 +11,14 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.PopupMenu;
-import android.widget.Toast;
+
+import java.util.List;
 
 public class RecentConversationsActivity extends Activity {
 
     LoginManager loginManager;
+    MessageManager messageManager;
+    ContactsManager contactsManager;
 
     ListView listView;
     EditText editText;
@@ -32,7 +34,12 @@ public class RecentConversationsActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recentconversations);
 
-        Log.i("testing", "RecentConversationsActivity.onCreate()");
+        final int yourId = 0; //TODO: need to get your ID
+
+        contactsManager = new ContactsManager(RecentConversationsActivity.this);
+
+        messageManager = new MessageManager(RecentConversationsActivity.this);
+        final List<Message> recentConversationsListData = messageManager.getMostRecentMessages();
 
         listView = (ListView) findViewById(R.id.recentConversationsList);
         editText = (EditText) findViewById(R.id.btnSearchContacts);
@@ -43,57 +50,53 @@ public class RecentConversationsActivity extends Activity {
         blockedListButton = (Button) findViewById(R.id.btnBlockedContacts);
         signOutButton = (Button) findViewById(R.id.btnSignOut);
 
-        // TODO: dummy test data, can delete after more of the project is finished
-        final Object[] theData = new Object[]{
-                new Object[]{"Arnar","13:37","I am da best."},
-                new Object[]{"Haukur","14:37","I am an idiot."} ,
-                new Object[]{"Simon","15:37","I am also an idiot."},
-                new Object[]{"Jonni","16:37","I am also an idiot."} ,
-                new Object[]{"Baddi","17:37","I am also an idiot."},
-                new Object[]{"Kári","18:37","I am also an idiot."} ,
-                new Object[]{"Lárus","19:37","I am also an idiot."},
-                new Object[]{"Tómas","20:37","I am also an idiot."} ,
-                new Object[]{"Indriði","21:37","I am also an idiot."},
-                new Object[]{"Auddi","22:37","I am also an idiot."} ,
-                new Object[]{"Sveppi","23:37","I am also an idiot."}
-        };
-
         // Populate Recent Conversations list with items
-        RecentConversationsAdapter recentConversationsAdapter = new RecentConversationsAdapter(theData, this.getBaseContext());
+        RecentConversationsAdapter recentConversationsAdapter = new RecentConversationsAdapter(recentConversationsListData, this.getBaseContext());
         listView.setAdapter(recentConversationsAdapter);
 
         // Set Tap onClick listener for list items
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
-                Object[] thisData = (Object[]) theData[arg2];
-                Toast.makeText(getApplicationContext(), "You clicked "+(String)thisData[0]+"'s conversation. TAP.", Toast. LENGTH_SHORT).show();
+                final int position = arg2;
+
+                Intent myIntent = new Intent(RecentConversationsActivity.this, ConversationActivity.class);
+                if(recentConversationsListData.get(position).getReceiverId()==yourId) {
+                    myIntent.putExtra("KEY_contactId", recentConversationsListData.get(position).getSenderId());
+                }else{
+                    myIntent.putExtra("KEY_contactId", recentConversationsListData.get(position).getReceiverId());
+                }
+                RecentConversationsActivity.this.startActivity(myIntent);
+
             }
         });
 
         // Set Long Press onClick listener for list items
         listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             public boolean onItemLongClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
-                Object[] thisData = (Object[]) theData[arg2];
-                Toast.makeText(getApplicationContext(), "You clicked "+(String)thisData[0]+"'s conversation. LONG PRESS.", Toast. LENGTH_SHORT).show();
-
-                /*PopupMenu popup = new PopupMenu(RecentConversationsActivity.this, arg1);
-                Menu m = popup.getMenu();
-                MenuInflater inflater = popup.getMenuInflater();
-                inflater.inflate(R.menu.block_or_remove_popupmenu, popup.getMenu());*/
+                final int position = arg2;
 
                 PopupMenu popup = new PopupMenu(RecentConversationsActivity.this, arg1, Gravity.RIGHT);
                 popup.getMenuInflater().inflate(R.menu.block_or_remove_popupmenu, popup.getMenu());
 
                 popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
                     public boolean onMenuItemClick(MenuItem item) {
-                        Toast.makeText(RecentConversationsActivity.this,"You Clicked : " + item.getTitle(),Toast.LENGTH_SHORT).show();
+                        if(item.getItemId()==R.id.block_contact){
+                            if(recentConversationsListData.get(position).getReceiverId()==yourId) {
+                                contactsManager.blockContact(contactsManager.getContactById(recentConversationsListData.get(position).getSenderId()));
+                            }else{
+                                contactsManager.blockContact(contactsManager.getContactById(recentConversationsListData.get(position).getReceiverId()));
+                            }
+                        }else{
+                            if(recentConversationsListData.get(position).getReceiverId()==yourId) {
+                                contactsManager.deleteContact(contactsManager.getContactById(recentConversationsListData.get(position).getSenderId()));
+                            }else{
+                                contactsManager.deleteContact(contactsManager.getContactById(recentConversationsListData.get(position).getReceiverId()));
+                            }
+                        }
                         return true;
                     }
                 });
 
-                /*if (audio.getDownload().equals("0")) {
-                    m.removeItem(R.id.add_download);
-                }*/
 
                 popup.show();
                 return true;
@@ -101,21 +104,11 @@ public class RecentConversationsActivity extends Activity {
             }
         });
 
-        // Set Search Contacts to go to SearchContactsActivity
+        // Set menu tab button listeners
         editText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent myIntent = new Intent(RecentConversationsActivity.this, RecentConversationsActivity.class); // TODO: vantar að breyta seinna viðfanginu í SearchContactsActivity
-                Toast.makeText(getApplicationContext(), "Opening Search Contacts Activity.", Toast. LENGTH_SHORT).show();
-                RecentConversationsActivity.this.startActivity(myIntent);
-            }
-        });
-
-        recentConversationsButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent myIntent = new Intent(RecentConversationsActivity.this, RecentConversationsActivity.class); // TODO: það á örugglega ekki að vera neitt onClick núna
-                Toast.makeText(getApplicationContext(), "This button should probably not do anything within this activity.", Toast. LENGTH_SHORT).show();
+                Intent myIntent = new Intent(RecentConversationsActivity.this, SearchContactsActivity.class);
                 RecentConversationsActivity.this.startActivity(myIntent);
             }
         });
@@ -123,8 +116,7 @@ public class RecentConversationsActivity extends Activity {
         contactsButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent myIntent = new Intent(RecentConversationsActivity.this, RecentConversationsActivity.class); // TODO: vantar að breyta seinna viðfanginu í ContactsActivity
-                Toast.makeText(getApplicationContext(), "Opening Contacts Activity.", Toast. LENGTH_SHORT).show();
+                Intent myIntent = new Intent(RecentConversationsActivity.this, ContactsActivity.class);
                 RecentConversationsActivity.this.startActivity(myIntent);
             }
         });
@@ -132,8 +124,7 @@ public class RecentConversationsActivity extends Activity {
         newFriendsButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent myIntent = new Intent(RecentConversationsActivity.this, RecentConversationsActivity.class); // TODO: vantar að breyta seinna viðfanginu í NewFriendsActivity
-                Toast.makeText(getApplicationContext(), "Opening NewFriendsActivity.", Toast. LENGTH_SHORT).show();
+                Intent myIntent = new Intent(RecentConversationsActivity.this, NewFriendsActivity.class);
                 RecentConversationsActivity.this.startActivity(myIntent);
             }
         });
@@ -141,8 +132,7 @@ public class RecentConversationsActivity extends Activity {
         blockedListButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent myIntent = new Intent(RecentConversationsActivity.this, RecentConversationsActivity.class); // TODO: vantar að breyta seinna viðfanginu í BlockedContactsActivity
-                Toast.makeText(getApplicationContext(), "Opening BlockedContactsActivity.", Toast. LENGTH_SHORT).show();
+                Intent myIntent = new Intent(RecentConversationsActivity.this, BlockedContactsActivity.class);
                 RecentConversationsActivity.this.startActivity(myIntent);
             }
         });
@@ -153,9 +143,6 @@ public class RecentConversationsActivity extends Activity {
                 loginManager = new LoginManager(RecentConversationsActivity.this);
                 Log.i("testing", "RecentConversationsActivity, signOutButton.onClickListener.signOut()");
                 loginManager.signOut();
-//                Intent myIntent = new Intent(RecentConversationsActivity.this, RecentConversationsActivity.class); // TODO: vantar að breyta þessu yfir í sign out
-//                Toast.makeText(getApplicationContext(), "Pretending to sign out.", Toast. LENGTH_SHORT).show();
-//                RecentConversationsActivity.this.startActivity(myIntent);
             }
         });
     }

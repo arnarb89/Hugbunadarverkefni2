@@ -2,43 +2,33 @@ package testcompany.cloudmessagingtest2;
 
 import java.util.Date;
 
-/**
- * Created by arnardesktop on 4.3.2017.
- */
-
 public class Message {
-    private String mTextContent;
-    private int mSenderId;
-    private int mReceiverId;
-    private Date mSentTime;
-    private int messageId;
+    private final String mContent;
+    private final int mSenderId;
+    private final int mReceiverId;
+    private final Date mSentTime;
 
-    Message(String mTextContent, int mSenderId, int mReceiverId, Date mSentTime, int messageId) {
-        this.mTextContent = mTextContent;
-        this.mSenderId = mSenderId;
-        this.mReceiverId = mReceiverId;
-        this.mSentTime = mSentTime;
-        this.messageId = messageId;
+    Message(String content, int senderId, int receiverId, Date sentTime  ){
+        mContent = content;
+        mSenderId = senderId;
+        mReceiverId = receiverId;
+        mSentTime = sentTime;
     }
 
-    public String getmTextContent() {
-        return mTextContent;
+    public String getContent() {
+        return mContent;
     }
 
-    public int getmSenderId() {
+    public int getSenderId() {
         return mSenderId;
     }
 
-    public int getmReceiverId() {
+    public int getReceiverId() {
         return mReceiverId;
     }
 
-    public Date getmSentTime() {
+    public Date getSentDate() {
         return mSentTime;
-    }
-
-    public int getMessageId() {
-        return messageId;
     }
 
 }

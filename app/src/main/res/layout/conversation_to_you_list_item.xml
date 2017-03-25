@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    >
+    <TextView xmlns:android="http://schemas.android.com/apk/res/android"
+        android:gravity="center_vertical|center_horizontal"
+        android:id="@+id/timeTextView"
+
+        android:padding="5dip"
+
+        android:background="@color/transparent"
+        android:textColor="@color/textAntiAccent"
+        android:textSize="10dip"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="13:37"/>
+
+
+
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        >
+        <TextView xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_alignParentLeft="true"
+
+            android:id="@+id/messageTextView"
+
+            android:maxWidth="280dip"
+
+            android:background="@drawable/message_to_you_shape"
+            android:textColor="@color/white"
+            android:textSize="15dip"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Substitute message... asdf asdf asdf asdf asdf asdf asdf asdf asdf asdf asdf asdf asdf asdf asdf asdf asdf "/>
+
+
+
+    </RelativeLayout>
+
+</LinearLayout>
