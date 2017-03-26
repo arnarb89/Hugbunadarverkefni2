@@ -8,7 +8,7 @@ public class Message {
     private final int mReceiverId;
     private final Date mSentTime;
 
-    Message(String content, int senderId, int receiverId, Date sentTime  ){
+    Message(String content, int senderId, int receiverId, Date sentTime){
         mContent = content;
         mSenderId = senderId;
         mReceiverId = receiverId;

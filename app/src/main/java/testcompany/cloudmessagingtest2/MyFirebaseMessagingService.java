@@ -28,6 +28,8 @@ import android.util.Log;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 
+import java.util.Date;
+
 
 public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
@@ -61,19 +63,25 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         // Check if message contains a data payload.
         if (remoteMessage.getData().size() > 0) {
             Log.i("testing", "MyFirebaseMessagingService.onMessageReceived(), remoteMessage.getData(): " + remoteMessage.getData());
-//            Log.d(TAG, "Message data payload: " + remoteMessage.getData());
 
+            String content = remoteMessage.getData().get("content");
+            int senderId = Integer.getInteger(remoteMessage.getData().get("senderId"));
+            int receiverId = Integer.getInteger(remoteMessage.getData().get("receiverId"));
+            Date sentTime = new Date(Long.parseLong(remoteMessage.getData().get("sentTime")));
+
+            Message message = new Message(content, senderId, receiverId, sentTime);
+
+            // TODO: send the message to the right place, probably MessageManager
         }
 
         // Check if message contains a notification payload.
-        if (remoteMessage.getNotification() != null) {
+        /*if (remoteMessage.getNotification() != null) {
             Log.i("testing", "MyFirebaseMessagingService.onMessageReceived(), remoteMessage.getNotification().getBody(): " + remoteMessage.getNotification().getBody());
-//            Log.d(TAG, "Message Notification Body: " + remoteMessage.getNotification().getBody());
-        }
+        }*/
 
         // Also if you intend on generating your own notifications as a result of a received FCM
         // message, here is where that should be initiated. See sendNotification method below.
-//        sendNotification(remoteMessage.getNotification().getBody());
+        sendNotification(remoteMessage.getNotification().getBody());
     }
     // [END receive_message]
 

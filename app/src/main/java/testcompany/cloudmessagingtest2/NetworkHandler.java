@@ -59,7 +59,7 @@ public class NetworkHandler {
                             e.printStackTrace();
                         }
                     }
-                });
+                }, null);
     }
 
     public void sendMessage(Message message) {
@@ -72,189 +72,89 @@ public class NetworkHandler {
         body.put("receiverId", Integer.toString(message.getReceiverId()));
         body.put("sentDate", message.getSentDate().toString());
 
-        sendPostRequest(SEND_CHAT_MESSAGE_URL, body,
-                new Response.Listener<JSONObject>() {
-                    @Override
-                    public void onResponse(JSONObject response) {
-                        Log.i("testing", response.toString());
-                    }
-                });
+        sendPostRequest(SEND_CHAT_MESSAGE_URL, body, null, null);
     }
 
     public void blockContact(Contact contact) {
         Log.i("testing", "blockContact()");
-        HashMap<String, String> body = new HashMap<String, String>();
-
-        body.put("senderId", "senderId");
-        body.put("receiverId", "receiverId");
-        body.put("userId", "userId");
-        body.put("subjectId", "subjectId");
-
-        sendPostRequest(REGISTRATION_URL, body,
-                new Response.Listener<JSONObject>() {
-                    @Override
-                    public void onResponse(JSONObject response) {
-                        Log.i("testing", response.toString());
-                        try {
-                            String userId = response.getString("userId");
-                            Log.i("testing", "sendPostRequest().onResponse(): " + userId);
-                            // TODO: set userId in the sharedPreferences or put it in the local database
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                });
+        generalContactRequest(SERVER_URL+BLOCK_CONTACT_URL, contact);
     }
 
     public void unblockContact(Contact contact) {
-        Log.i("testing", "blockContact()");
-        HashMap<String, String> body = new HashMap<String, String>();
-
-        body.put("content", "content");
-        body.put("senderId", "senderId");
-        body.put("receiverId", "receiverId");
-        body.put("sentDate", "sentDate");
-        body.put("searchString", "searchString");
-        body.put("userId", "userId");
-        body.put("subjectId", "subjectId");
-
-        sendPostRequest(REGISTRATION_URL, body,
-                new Response.Listener<JSONObject>() {
-                    @Override
-                    public void onResponse(JSONObject response) {
-                        Log.i("testing", response.toString());
-                        try {
-                            String userId = response.getString("userId");
-                            Log.i("testing", "sendPostRequest().onResponse(): " + userId);
-                            // TODO: set userId in the sharedPreferences or put it in the local database
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                });
+        Log.i("testing", "unblockContact()");
+        generalContactRequest(SERVER_URL+UNBLOCK_CONTACT_URL, contact);
     }
 
     public void addContact(Contact contact) {
-        Log.i("testing", "blockContact()");
-        HashMap<String, String> body = new HashMap<String, String>();
-
-        body.put("content", "content");
-        body.put("senderId", "senderId");
-        body.put("receiverId", "receiverId");
-        body.put("sentDate", "sentDate");
-        body.put("searchString", "searchString");
-        body.put("userId", "userId");
-        body.put("subjectId", "subjectId");
-
-        sendPostRequest(REGISTRATION_URL, body,
-                new Response.Listener<JSONObject>() {
-                    @Override
-                    public void onResponse(JSONObject response) {
-                        Log.i("testing", response.toString());
-                        try {
-                            String userId = response.getString("userId");
-                            Log.i("testing", "sendPostRequest().onResponse(): " + userId);
-                            // TODO: set userId in the sharedPreferences or put it in the local database
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                });
+        Log.i("testing", "addContact()");
+        generalContactRequest(SERVER_URL+ADD_CONTACT_URL, contact);
     }
 
     public void deleteContact(Contact contact) {
-        Log.i("testing", "blockContact()");
+        Log.i("testing", "deleteContact()");
+        generalContactRequest(SERVER_URL+DELETE_CONTACT_URL, contact);
+    }
+
+    private void generalContactRequest(String url, Contact contact) {
+        Log.i("testing", "generalContactRequest()");
+        HashMap<String, String> body = new HashMap<String, String>();
+        String userId = Integer.toString(PreferencesManager.getUserId(mContext));
+
+        body.put("fireBaseUserIdToken", mFireBaseUserIdToken);
+        body.put("userId", userId);
+        body.put("subjectId", Integer.toString(contact.getId()));
+
+
+        sendPostRequest(url, body, null, null);
+    }
+
+    public void searchForContact(String searchString, Response.Listener<JSONObject> responseListener, Response.ErrorListener errorListener) {
+        Log.i("testing", "searchForContact()");
         HashMap<String, String> body = new HashMap<String, String>();
 
-        body.put("content", "content");
-        body.put("senderId", "senderId");
-        body.put("receiverId", "receiverId");
-        body.put("sentDate", "sentDate");
-        body.put("searchString", "searchString");
-        body.put("userId", "userId");
-        body.put("subjectId", "subjectId");
+        body.put("firebaseUserIdToken", mFireBaseUserIdToken);
+        body.put("searchString", searchString);
 
-        sendPostRequest(REGISTRATION_URL, body,
-                new Response.Listener<JSONObject>() {
-                    @Override
-                    public void onResponse(JSONObject response) {
-                        Log.i("testing", response.toString());
-                        try {
-                            String userId = response.getString("userId");
-                            Log.i("testing", "sendPostRequest().onResponse(): " + userId);
-                            // TODO: set userId in the sharedPreferences or put it in the local database
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                });
+        sendPostRequest(SEARCH_FOR_CONTACT_URL, body, responseListener, errorListener);
     }
 
-    public void searchForContact(Contact contact) {
-        Log.i("testing", "blockContact()");
-        HashMap<String, String> body = new HashMap<String, String>();
+    /*new Response.Listener<JSONObject>() {
+        @Override
+        public void onResponse(JSONObject response) {
+            Log.i("testing", response.toString());
+            try {
+                // TODO: send the response to the correct place, response should include userId and username
+                int userId = Integer.getInteger(response.getString("userId"));
+                String username = response.getString("username");
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+    }, null);*/
 
-        body.put("content", "content");
-        body.put("senderId", "senderId");
-        body.put("receiverId", "receiverId");
-        body.put("sentDate", "sentDate");
-        body.put("searchString", "searchString");
-        body.put("userId", "userId");
-        body.put("subjectId", "subjectId");
-
-        sendPostRequest(REGISTRATION_URL, body,
-                new Response.Listener<JSONObject>() {
-                    @Override
-                    public void onResponse(JSONObject response) {
-                        Log.i("testing", response.toString());
-                        try {
-                            String userId = response.getString("userId");
-                            Log.i("testing", "sendPostRequest().onResponse(): " + userId);
-                            // TODO: set userId in the sharedPreferences or put it in the local database
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                });
-    }
-
-    public static void receiveMessage(Message message) {
-        // TODO: implement this method, should deliver the message to the correct conversation
-    }
-
-    private void sendPostRequest(String url, HashMap<String, String> requestBody, Response.Listener<JSONObject> responseListener) {
+    private void sendPostRequest(String url, HashMap<String, String> requestBody, Response.Listener<JSONObject> responseListener, Response.ErrorListener errorListener) {
         Log.i("testing", "sendPostRequest()");
 
-        JsonObjectRequest req = new JsonObjectRequest(SERVER_URL+url, new JSONObject(requestBody) /*new JSONObject(params)*/,
-                responseListener, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                Log.i("testing", "sendPostRequest().onErrorResponse: " + error.toString());
-            }
-        });
+        if(errorListener == null) {
+            errorListener = new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    Log.i("testing", "sendPostRequest().onErrorResponse: " + error.toString());
+                }
+            };
+        }
+        if(responseListener == null) {
+            responseListener = new Response.Listener<JSONObject>() {
+                @Override
+                public void onResponse(JSONObject response) {
+                    Log.i("testing", response.toString());
+                }
+            };
+        }
 
-        // add the request object to the mQueue to be executed
-        mQueue.add(req);
-    }
+        JsonObjectRequest req = new JsonObjectRequest(SERVER_URL+url, new JSONObject(requestBody), responseListener, errorListener);
 
-    private void sendGetRequest(String url, String idToken) {
-        Log.i("testing", "sendGetRequest()");
-
-        // pass second argument as "null" for GET requests
-        JsonObjectRequest req = new JsonObjectRequest(url, null,
-                new Response.Listener<JSONObject>() {
-                    @Override
-                    public void onResponse(JSONObject response) {
-                        Log.i("testing", "sendGetRequest().onResponse(): " + response.toString());
-                    }
-                }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                Log.i("testing", "sendGetRequest().onErrorResponse: " + error.toString());
-            }
-        });
-
-        // add the request object to the mQueue to be executed
+        // add the request object to the queue to be executed
         mQueue.add(req);
     }
 }

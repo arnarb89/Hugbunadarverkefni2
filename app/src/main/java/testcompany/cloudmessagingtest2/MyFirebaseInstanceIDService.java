@@ -44,11 +44,12 @@ public class MyFirebaseInstanceIDService extends FirebaseInstanceIdService {
     private void sendRegistrationToServer(String token) {
         // TODO: Implement this method to send token to your app server.
         String firebaseIdToken;
-        if((firebaseIdToken = PreferencesManager.getFirebaseUserIdToken(this)) != null) {
+        if(PreferencesManager.getFirebaseUserIdToken(this) != null) {
             // TODO: send the deviceIdToken to the server along with the firebaseIdToken or some other id (a userId we might have generated) to associate this device to this user
+            NetworkHandler networkHandler = new NetworkHandler(this);
+            networkHandler.registerUser(token);
 
-
-        } // otherwise do nothing, since we have no way to associate this deviceIdToken with a user
+        } // otherwise do nothing, since we have no way to associate this instanceIdToken with a user
 
     }
 }
