@@ -47,6 +47,7 @@ public class ContactsManager {
 
     public void addContact(Contact contact) {
         mDbHelper.addContact(contact);
+        mNetworkHandler.addContact(contact);
     }
 
     public void addRequest(Contact contact) {
@@ -63,14 +64,17 @@ public class ContactsManager {
 
     public void deleteContact(Contact contact) {
         mDbHelper.deleteContact(contact);
+        mNetworkHandler.deleteContact(contact);
     }
 
     public void blockContact(Contact contact) {
         mDbHelper.blockContact(contact);
+        mNetworkHandler.blockContact(contact);
     }
 
     public void unblockContact(Contact contact) {
         mDbHelper.unblockContact(contact);
+        mNetworkHandler.unblockContact(contact);
     }
 
     public List<Contact> searchContacts(String username) {
