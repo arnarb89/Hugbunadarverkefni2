@@ -68,8 +68,8 @@ public class NetworkHandler {
 
         body.put("fireBaseUserIdToken", mFireBaseUserIdToken);
         body.put("content", message.getContent());
-        body.put("senderId", ""+message.getSenderId()); // TODO: maybe change how int is converted to String?
-        body.put("receiverId", ""+message.getReceiverId()); // TODO: maybe change how int is converted to String?
+        body.put("senderId", Integer.toString(message.getSenderId()));
+        body.put("receiverId", Integer.toString(message.getReceiverId()));
         body.put("sentDate", message.getSentDate().toString());
 
         sendPostRequest(SEND_CHAT_MESSAGE_URL, body,
