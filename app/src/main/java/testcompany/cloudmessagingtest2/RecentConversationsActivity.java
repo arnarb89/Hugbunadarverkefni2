@@ -1,8 +1,12 @@
 package testcompany.cloudmessagingtest2;
 
 import android.app.Activity;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
+import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.MenuItem;
@@ -13,6 +17,7 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.PopupMenu;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class RecentConversationsActivity extends Activity {
@@ -30,6 +35,10 @@ public class RecentConversationsActivity extends Activity {
     Button blockedListButton;
     Button signOutButton;
 
+    RecentConversationsAdapter recentConversationsAdapter;
+
+    final List<Message> recentConversationsListData = new ArrayList<Message>();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -40,7 +49,7 @@ public class RecentConversationsActivity extends Activity {
         contactsManager = new ContactsManager(RecentConversationsActivity.this);
 
         messageManager = new MessageManager(RecentConversationsActivity.this);
-        final List<Message> recentConversationsListData = messageManager.getMostRecentMessages();
+
 
         listView = (ListView) findViewById(R.id.recentConversationsList);
         editText = (EditText) findViewById(R.id.btnSearchContacts);
@@ -51,9 +60,17 @@ public class RecentConversationsActivity extends Activity {
         blockedListButton = (Button) findViewById(R.id.btnBlockedContacts);
         signOutButton = (Button) findViewById(R.id.btnSignOut);
 
+        List<Message> recentConversationsListDataTemp = messageManager.getMostRecentMessages();
+        for(int i = 0; i<recentConversationsListDataTemp.size() ;i++){
+            recentConversationsListData.add(recentConversationsListDataTemp.get(i));
+        }
+
         // Populate Recent Conversations list with items
-        RecentConversationsAdapter recentConversationsAdapter = new RecentConversationsAdapter(recentConversationsListData, this.getBaseContext());
+        recentConversationsAdapter = new RecentConversationsAdapter(recentConversationsListData, this.getBaseContext());
         listView.setAdapter(recentConversationsAdapter);
+
+        LocalBroadcastManager.getInstance(getBaseContext()).registerReceiver(mMessageReceiver,
+                new IntentFilter("update_recent_conversations"));
 
         // Set Tap onClick listener for list items
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -147,4 +164,21 @@ public class RecentConversationsActivity extends Activity {
             }
         });
     }
+
+    public BroadcastReceiver mMessageReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (intent != null ) {
+                recentConversationsListData.clear();
+                recentConversationsListData.addAll(messageManager.getMostRecentMessages());
+                recentConversationsAdapter.notifyDataSetChanged();
+
+                //TODO: put this in FireBaseMessagingService:
+                //Intent intent = new Intent("update_recent_conversations");
+                //LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
+
+
+            }
+        }
+    };
 }
