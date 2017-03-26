@@ -15,9 +15,12 @@ import com.google.firebase.iid.FirebaseInstanceId;
  * Created by Notandi on 3/19/2017.
  */
 
-public class TokenManager {
-    private static final String firebaseUserIdTokenKey = "firebaseUserIdToken";
-    private static final String sharedPreferencesName = "tokens";
+public class PreferencesManager {
+    private static final String firebaseUserIdToken_Key = "firebaseUserIdToken";
+    private static final String firebaseUserIdToken_PreferencesName = "tokens";
+    private static final String userId_Key = "userId";
+    private static final String userId_PreferencesName = "ids";
+
 
     public static void setFirebaseUserIdToken(final Context context) {
         Log.i("testing", "TokenManager.setFirebaseUserIdToken()");
@@ -31,13 +34,13 @@ public class TokenManager {
                             String firebaseInstanceIdToken = FirebaseInstanceId.getInstance().getToken();
 //                            Log.i("testing", "TokenManager.setFirebaseUserIdToken(), firebase idToken = " + firebaseUserIdToken);
 
-                            context.getSharedPreferences(sharedPreferencesName,0).edit().putString(firebaseUserIdTokenKey, firebaseUserIdToken).commit();
+                            context.getSharedPreferences(firebaseUserIdToken_PreferencesName,0).edit().putString(firebaseUserIdToken_Key, firebaseUserIdToken).commit();
 
                             Log.i("testing", "TokenManager.setFirebaseUserIdToken(), userIdToken: " + firebaseUserIdToken);
                             Log.i("testing", "TokenManager.setFirebaseUserIdToken(), instanceIdToken: " + firebaseInstanceIdToken);
 
                             NetworkHandler networkHandler = new NetworkHandler(context);
-                            networkHandler.registerUser(firebaseUserIdToken, firebaseInstanceIdToken);
+                            networkHandler.registerUser(firebaseInstanceIdToken);
 
                             // Send token to your backend via HTTPS
                             // ...
@@ -52,9 +55,22 @@ public class TokenManager {
     /**
      *
      * @param context
-     * @return The firebaseUserIdToken can be used to authenticate the user with the server, it has to go with all message requests
+     * @return The firebaseUserIdToken can be used to authenticate the user with the server, it has to go with http requests that require authentication
      */
     public static String getFirebaseUserIdToken(final Context context) {
-        return context.getSharedPreferences(sharedPreferencesName,0).getString(firebaseUserIdTokenKey, null);
+        return context.getSharedPreferences(firebaseUserIdToken_PreferencesName,0).getString(firebaseUserIdToken_Key, null);
+    }
+
+    public static void setUserId(Context context, int userId) {
+        context.getSharedPreferences(userId_PreferencesName,0).edit().putInt(userId_Key, userId).commit();
+    }
+
+    /**
+     *
+     * @param context
+     * @return userId : unique identifier for the user in the system, is sent with all http requests that alter connections between the user and another user
+     */
+    public static int getUserId(Context context) {
+        return context.getSharedPreferences(userId_PreferencesName,0).getInt(userId_Key, 0);
     }
 }
