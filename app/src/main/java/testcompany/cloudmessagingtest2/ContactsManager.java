@@ -2,8 +2,13 @@ package testcompany.cloudmessagingtest2;
 
 import android.content.Context;
 
+import com.android.volley.Request;
 import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+
+import org.json.JSONObject;
 
 import java.util.List;
 
@@ -27,21 +32,21 @@ public class ContactsManager {
         return mDbHelper.getNonBlockedContacts();
     }
 
-//    TODO must wait for app-server / correct url
-//    public void globalSearchForUsername(
-//            String username,
-//            Response.Listener<JSONObject> responseListener,
-//            Response.ErrorListener errorListener)
-//    {
-//        JsonObjectRequest jsonRequest = new JsonObjectRequest(
-//                                            Request.Method.GET,
-//                                            mURL_CONTACTS,
-//                                            null,
-//                                            responseListener,
-//                                            errorListener
-//                                        );
-//        mRequestQueue.add(jsonRequest);
-//    }
+    //TODO must wait for app-server / correct url
+    public void globalSearchForUsername(
+            String username,
+            Response.Listener<JSONObject> responseListener,
+            Response.ErrorListener errorListener)
+    {
+        JsonObjectRequest jsonRequest = new JsonObjectRequest(
+                                            Request.Method.GET,
+                                            mURL_CONTACTS,
+                                            null,
+                                            responseListener,
+                                            errorListener
+                                        );
+        mRequestQueue.add(jsonRequest);
+    }
     public List<Contact> getRequests() { return mDbHelper.getRequests(); }
 
     public Contact getContactById(int userid) {

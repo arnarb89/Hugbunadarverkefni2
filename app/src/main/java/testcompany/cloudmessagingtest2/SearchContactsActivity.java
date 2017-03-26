@@ -14,7 +14,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.PopupMenu;
-import android.widget.Toast;
 
 import java.util.List;
 
@@ -113,8 +112,7 @@ public class SearchContactsActivity extends Activity {
         recentConversationsButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent myIntent = new Intent(SearchContactsActivity.this, RecentConversationsActivity.class); // TODO: það á örugglega ekki að vera neitt onClick núna
-                Toast.makeText(getApplicationContext(), "Opening RecentConversationsActivity.", Toast. LENGTH_SHORT).show();
+                Intent myIntent = new Intent(SearchContactsActivity.this, RecentConversationsActivity.class);
                 SearchContactsActivity.this.startActivity(myIntent);
             }
         });
@@ -122,8 +120,7 @@ public class SearchContactsActivity extends Activity {
         contactsButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent myIntent = new Intent(SearchContactsActivity.this, ContactsActivity.class); // TODO: það á örugglega ekki að vera neitt onClick núna
-                Toast.makeText(getApplicationContext(), "Opening Contacts Activity.", Toast. LENGTH_SHORT).show();
+                Intent myIntent = new Intent(SearchContactsActivity.this, ContactsActivity.class);
                 SearchContactsActivity.this.startActivity(myIntent);
             }
         });
@@ -131,8 +128,7 @@ public class SearchContactsActivity extends Activity {
         newFriendsButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent myIntent = new Intent(SearchContactsActivity.this, NewFriendsActivity.class); // TODO: vantar að breyta seinna viðfanginu í NewFriendsActivity
-                Toast.makeText(getApplicationContext(), "Opening NewFriendsActivity.", Toast. LENGTH_SHORT).show();
+                Intent myIntent = new Intent(SearchContactsActivity.this, NewFriendsActivity.class);
                 SearchContactsActivity.this.startActivity(myIntent);
             }
         });
@@ -140,8 +136,7 @@ public class SearchContactsActivity extends Activity {
         blockedListButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent myIntent = new Intent(SearchContactsActivity.this, BlockedContactsActivity.class); // TODO: vantar að breyta seinna viðfanginu í BlockedContactsActivity
-                Toast.makeText(getApplicationContext(), "Opening BlockedContactsActivity.", Toast. LENGTH_SHORT).show();
+                Intent myIntent = new Intent(SearchContactsActivity.this, BlockedContactsActivity.class);
                 SearchContactsActivity.this.startActivity(myIntent);
             }
         });
