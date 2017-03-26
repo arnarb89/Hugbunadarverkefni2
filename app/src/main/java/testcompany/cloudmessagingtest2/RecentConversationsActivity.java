@@ -172,12 +172,6 @@ public class RecentConversationsActivity extends Activity {
                 recentConversationsListData.clear();
                 recentConversationsListData.addAll(messageManager.getMostRecentMessages());
                 recentConversationsAdapter.notifyDataSetChanged();
-
-                //TODO: put this in FireBaseMessagingService:
-                //Intent intent = new Intent("update_recent_conversations");
-                //LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
-
-
             }
         }
     };

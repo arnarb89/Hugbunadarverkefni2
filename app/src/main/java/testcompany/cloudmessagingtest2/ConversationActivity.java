@@ -143,15 +143,6 @@ public class ConversationActivity extends Activity {
                 Message message = new Message(content,senderId, receiverId, new Date(sentDate) );
                 previousMessages.add(0, message);
                 conversationAdapter.notifyDataSetChanged();
-
-                //TODO: put this in FireBaseMessagingService:
-                //Intent intent = new Intent("update_conversation");
-                //intent.putExtra("content", message.getContent());
-                //intent.putExtra("senderId", message.getSenderId());
-                //intent.putExtra("receiverId", message.getSentDate().getTime());
-                //LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
-
-
             }
         }
     };

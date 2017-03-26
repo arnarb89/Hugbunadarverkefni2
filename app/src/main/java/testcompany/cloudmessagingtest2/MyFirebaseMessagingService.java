@@ -23,6 +23,7 @@ import android.content.Intent;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.support.v4.app.NotificationCompat;
+import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 
 import com.google.firebase.messaging.FirebaseMessagingService;
@@ -71,7 +72,15 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
             Message message = new Message(content, senderId, receiverId, sentTime);
 
-            // TODO: send the message to the right place, probably MessageManager
+            Intent intent1 = new Intent("update_conversation");
+            intent1.putExtra("content", message.getContent());
+            intent1.putExtra("senderId", message.getSenderId());
+            intent1.putExtra("receiverId", message.getReceiverId());
+            intent1.putExtra("sentDate", message.getSentDate().getTime());
+            LocalBroadcastManager.getInstance(getBaseContext()).sendBroadcast(intent1);
+
+            Intent intent2 = new Intent("update_recent_conversations");
+            LocalBroadcastManager.getInstance(getBaseContext()).sendBroadcast(intent2);
         }
 
         // Check if message contains a notification payload.
