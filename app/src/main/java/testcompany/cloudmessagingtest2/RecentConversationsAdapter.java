@@ -51,7 +51,7 @@ public class RecentConversationsAdapter extends BaseAdapter {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         Message thisData =  data.get(position);
-        int yourId = 0; //TODO: needs to get your ID
+        int yourId = PreferencesManager.getUserId(context);
 
         convertView= layoutInflater.inflate(R.layout.recent_conversations_list_item, parent, false);
 

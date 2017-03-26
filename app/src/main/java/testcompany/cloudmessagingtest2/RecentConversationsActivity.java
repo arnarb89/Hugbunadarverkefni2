@@ -35,7 +35,7 @@ public class RecentConversationsActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recentconversations);
 
-        final int yourId = 0; //TODO: need to get your ID
+        final int yourId = PreferencesManager.getUserId(RecentConversationsActivity.this);
 
         contactsManager = new ContactsManager(RecentConversationsActivity.this);
 

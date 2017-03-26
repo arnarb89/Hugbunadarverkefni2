@@ -11,6 +11,12 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
 public class NewFriendsActivity extends Activity {
 
     LoginManager loginManager;
@@ -47,12 +53,19 @@ public class NewFriendsActivity extends Activity {
 
         lookForContactsEditText = (EditText)findViewById(R.id.lookForContactsEditText);
         addContactButton = (Button) findViewById(R.id.sendFriendRequestButton);
+        addContactButton.setTextColor(getResources().getColor(R.color.darkred));
 
         // Populate Recent Conversations list with items
         NewFriendsRequestsAdapter newFriendsRequestsAdapter = new NewFriendsRequestsAdapter(contactsManager.getRequests(), this.getBaseContext());
         listView.setAdapter(newFriendsRequestsAdapter);
 
 
+        addContactButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
 
 
         lookForContactsEditText.addTextChangedListener(new TextWatcher() {
@@ -64,15 +77,48 @@ public class NewFriendsActivity extends Activity {
             }
 
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-                Toast.makeText(getApplicationContext(), "Look For Contacts text has changed.", Toast. LENGTH_SHORT).show();
-                // TODO: contactManager.globalSearchForUsername
-                addContactButton.setOnClickListener(new View.OnClickListener() {
+                Response.Listener<JSONObject> responseListener = new Response.Listener<JSONObject>() {
                     @Override
-                    public void onClick(View v) {
-                        contactsManager.addContact(new Contact(0,"temp",false)); // TODO: should use contact given by contactManager.globalSearchForUsername above
+                    public void onResponse(JSONObject response) {
+                        final Contact contact;
+                        int userIdTEMP = 0;
+                        String usernameTEMP = "";
+                        try {
+                            userIdTEMP = Integer.getInteger(response.getString("userId"));
+                            usernameTEMP = response.getString("username");
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                            Toast.makeText(NewFriendsActivity.this, "There was an error.", Toast.LENGTH_SHORT).show();
+                        }
+                        final int userIdTEMPTEMP = userIdTEMP;
+                        final String usernameTEMPTEMP = usernameTEMP;
+
+                        addContactButton.setTextColor(getResources().getColor(R.color.darkgreen));
+                        addContactButton.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+
+                                contactsManager.addContact(new Contact(userIdTEMPTEMP,usernameTEMPTEMP,false));
+                                Toast.makeText(NewFriendsActivity.this, "Contact added.", Toast.LENGTH_SHORT).show();
+                            }
+                        });
                     }
-                });
+                };
+                Response.ErrorListener errorListener = new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Toast.makeText(NewFriendsActivity.this, "There was an error.", Toast.LENGTH_SHORT).show();
+                        addContactButton.setTextColor(getResources().getColor(R.color.darkred));
+                        addContactButton.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+
+                            }
+                        });
+
+                    }
+                };
+                contactsManager.globalSearchForUsername(s.toString(), responseListener,errorListener );
             }
         });
 
