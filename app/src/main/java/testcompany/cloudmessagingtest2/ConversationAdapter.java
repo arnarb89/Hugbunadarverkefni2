@@ -51,7 +51,7 @@ public class ConversationAdapter extends BaseAdapter {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         Message thisData = data.get(position);
-        int yourId = 0; //TODO: need to get your ID
+        int yourId = PreferencesManager.getUserId(context);
 
         if(thisData.getSenderId()==yourId){
             convertView= layoutInflater.inflate(R.layout.conversation_you_list_item, parent, false);

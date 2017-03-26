@@ -32,7 +32,7 @@ public class ConversationActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_conversation);
         final int IdOfWhoYouAreTalkingTo = getIntent().getIntExtra("KEY_contactId",0);
-        final int yourId = 0; // TODO: needs to get your ID
+        final int yourId = PreferencesManager.getUserId(ConversationActivity.this);
 
         contactManager = new ContactsManager(ConversationActivity.this);
         messageManager = new MessageManager(ConversationActivity.this);
