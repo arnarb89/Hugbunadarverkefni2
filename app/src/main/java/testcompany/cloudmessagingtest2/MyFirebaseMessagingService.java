@@ -72,6 +72,9 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
             Message message = new Message(content, senderId, receiverId, sentTime);
 
+            MessageManager messageManager = new MessageManager(getBaseContext());
+            messageManager.addMessage(message);
+
             Intent intent1 = new Intent("update_conversation");
             intent1.putExtra("content", message.getContent());
             intent1.putExtra("senderId", message.getSenderId());
