@@ -72,33 +72,30 @@ public class NewFriendsActivity extends Activity {
 
             public void afterTextChanged(Editable s) {}
 
-            public void beforeTextChanged(CharSequence s, int start,
-                                          int count, int after) {
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
             }
 
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            public void onTextChanged(CharSequence searchInput, int start, int before, int count) {
                 Response.Listener<JSONObject> responseListener = new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
-                        final Contact contact;
-                        int userIdTEMP = 0;
-                        String usernameTEMP = "";
+                        int userId = 0;
+                        String username = "";
                         try {
-                            userIdTEMP = Integer.getInteger(response.getString("userId"));
-                            usernameTEMP = response.getString("username");
+                            userId = Integer.getInteger(response.getString("userId"));
+                            username = response.getString("username");
                         } catch (JSONException e) {
                             e.printStackTrace();
                             Toast.makeText(NewFriendsActivity.this, "There was an error.", Toast.LENGTH_SHORT).show();
                         }
-                        final int userIdTEMPTEMP = userIdTEMP;
-                        final String usernameTEMPTEMP = usernameTEMP;
+                        final int userId_final = userId;
+                        final String username_final = username;
 
                         addContactButton.setTextColor(getResources().getColor(R.color.darkgreen));
                         addContactButton.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
-
-                                contactsManager.addContact(new Contact(userIdTEMPTEMP,usernameTEMPTEMP,false));
+                                contactsManager.addContact(new Contact(userId_final, username_final, false));
                                 Toast.makeText(NewFriendsActivity.this, "Contact added.", Toast.LENGTH_SHORT).show();
                             }
                         });
@@ -112,13 +109,12 @@ public class NewFriendsActivity extends Activity {
                         addContactButton.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
-
                             }
                         });
 
                     }
                 };
-                contactsManager.globalSearchForUsername(s.toString(), responseListener,errorListener );
+                contactsManager.globalSearchForUsername(searchInput.toString(), responseListener,errorListener );
             }
         });
 

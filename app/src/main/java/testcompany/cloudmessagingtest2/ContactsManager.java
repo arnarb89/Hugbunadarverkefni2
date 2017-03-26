@@ -15,13 +15,13 @@ import java.util.List;
 public class ContactsManager {
 
     private ContactsDatabaseHelper mDbHelper;
-    private RequestQueue mRequestQueue;
     //    TODO AuthHelper mAuthHelper;
     private static final String mURL_CONTACTS = "http://something.com"; // TODO
+    private NetworkHandler mNetworkHandler;
 
     public ContactsManager(Context context) {
         mDbHelper = new ContactsDatabaseHelper(context);
-        mRequestQueue = Volley.newRequestQueue(context);
+        mNetworkHandler = new NetworkHandler(context);
     }
 
     public List<Contact> getBlockedContacts() {
@@ -32,20 +32,12 @@ public class ContactsManager {
         return mDbHelper.getNonBlockedContacts();
     }
 
-    //TODO must wait for app-server / correct url
     public void globalSearchForUsername(
             String username,
             Response.Listener<JSONObject> responseListener,
             Response.ErrorListener errorListener)
     {
-        JsonObjectRequest jsonRequest = new JsonObjectRequest(
-                                            Request.Method.GET,
-                                            mURL_CONTACTS,
-                                            null,
-                                            responseListener,
-                                            errorListener
-                                        );
-        mRequestQueue.add(jsonRequest);
+        mNetworkHandler.searchForContact(username, responseListener, errorListener);
     }
     public List<Contact> getRequests() { return mDbHelper.getRequests(); }
 
