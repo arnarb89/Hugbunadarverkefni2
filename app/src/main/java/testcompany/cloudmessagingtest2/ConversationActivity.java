@@ -1,7 +1,12 @@
 package testcompany.cloudmessagingtest2;
 
 import android.app.Activity;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
+import android.support.v4.content.LocalBroadcastManager;
 import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
@@ -11,6 +16,7 @@ import android.widget.ListView;
 import android.widget.PopupMenu;
 import android.widget.Toast;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -27,12 +33,17 @@ public class ConversationActivity extends Activity {
     ContactsManager contactManager;
     MessageManager messageManager;
 
+    final List<Message> previousMessages = new ArrayList<Message>();
+    final ConversationAdapter conversationAdapter = new ConversationAdapter(previousMessages, this.getBaseContext());
+    int idOfWhoYouAreTalkingToTemp;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_conversation);
         final int IdOfWhoYouAreTalkingTo = getIntent().getIntExtra("KEY_contactId",0);
         final int yourId = PreferencesManager.getUserId(ConversationActivity.this);
+        idOfWhoYouAreTalkingToTemp = IdOfWhoYouAreTalkingTo;
 
         contactManager = new ContactsManager(ConversationActivity.this);
         messageManager = new MessageManager(ConversationActivity.this);
@@ -46,15 +57,20 @@ public class ConversationActivity extends Activity {
         conversationListView = (ListView) findViewById(R.id.conversationListView);
 
         //
-        List<Message> previousMessages =  messageManager.getPreviousMessages(yourId, contactManager.getContactById(IdOfWhoYouAreTalkingTo), new Date());
+        List<Message> previousMessagesTemp =  messageManager.getPreviousMessages(yourId, contactManager.getContactById(IdOfWhoYouAreTalkingTo), new Date());
+        for(int i = 0; i<previousMessagesTemp.size() ;i++){
+            previousMessages.add(previousMessagesTemp.get(i));
+        }
 
         // Populate the conversation list with items
-        ConversationAdapter conversationAdapter = new ConversationAdapter(previousMessages, this.getBaseContext());
+        //final ConversationAdapter conversationAdapter = new ConversationAdapter(previousMessages, this.getBaseContext());
         conversationListView.setAdapter(conversationAdapter);
+        conversationAdapter.notifyDataSetChanged();
 
 
 
-
+        LocalBroadcastManager.getInstance(getBaseContext()).registerReceiver(mMessageReceiver,
+                new IntentFilter("update_conversation"));
 
 
         sendMessageButton.setOnClickListener(new View.OnClickListener() {
@@ -66,8 +82,9 @@ public class ConversationActivity extends Activity {
                 int receiverId = IdOfWhoYouAreTalkingTo;
                 Date sentTime = new Date();
                 Message message = new Message(content, senderId, receiverId, sentTime);
-                // TODO: vantar messageManager.sendMessage(message);
-                // TODO: vantar update conversation, kannski update-að frá MessageManager...
+
+                previousMessages.add(0, message);
+                conversationAdapter.notifyDataSetChanged();
             }
         });
 
@@ -107,4 +124,35 @@ public class ConversationActivity extends Activity {
             }
         });
     }
+
+    public BroadcastReceiver mMessageReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (intent != null ) {
+
+                String content = intent.getStringExtra("content");
+                int senderId = intent.getIntExtra("senderId",0);
+                int receiverId = intent.getIntExtra("receiverId",0);
+                long sentDate = intent.getLongExtra("sentDate",0);
+
+                if(idOfWhoYouAreTalkingToTemp!=senderId){
+                    return;
+                }
+
+                //add message to conversation listView
+                Message message = new Message(content,senderId, receiverId, new Date(sentDate) );
+                previousMessages.add(0, message);
+                conversationAdapter.notifyDataSetChanged();
+
+                //TODO: put this in FireBaseMessagingService:
+                //Intent intent = new Intent("update_conversation");
+                //intent.putExtra("content", message.getContent());
+                //intent.putExtra("senderId", message.getSenderId());
+                //intent.putExtra("receiverId", message.getSentDate().getTime());
+                //LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
+
+
+            }
+        }
+    };
 }
