@@ -113,7 +113,7 @@ public class LoginManager {
 
             // Successfully signed in
             if (resultCode == ResultCodes.OK) {
-                TokenManager.setFirebaseUserIdToken(mActivity);
+                PreferencesManager.setFirebaseUserIdToken(mActivity);
                 mActivity.startActivity(new Intent(mActivity, RecentConversationsActivity.class)
                         .putExtra("google_token", response.getIdpToken()));
                 mActivity.finish();
