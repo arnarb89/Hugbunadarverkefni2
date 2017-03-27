@@ -20,8 +20,7 @@ import java.util.HashMap;
  */
 
 public class NetworkHandler {
-    private static final String SERVER_URL = "http://192.168.1.102:3000"; // Arnar
-//    private static final String SERVER_URL = "http://192.168.1.183:3000"; // Heima
+    private static final String SERVER_URL = "http://e28-104.gardur.hi.is:8008";
     private static final String REGISTRATION_URL = "/register";
     private static final String SEND_CHAT_MESSAGE_URL = "/sendMessage";
     private static final String BLOCK_CONTACT_URL = "/contact/block";
@@ -44,7 +43,7 @@ public class NetworkHandler {
         Log.i("testing", "registerUser()");
         HashMap<String, String> body = new HashMap<String, String>();
 
-        body.put("fireBaseUserIdToken", mFireBaseUserIdToken);
+        body.put("firebaseUserIdToken", mFireBaseUserIdToken);
         body.put("firebaseInstanceIdToken", firebaseInstanceIdToken);
 
         sendPostRequest(REGISTRATION_URL, body,
@@ -59,20 +58,20 @@ public class NetworkHandler {
                             e.printStackTrace();
                         }
                     }
-                }, null);
+                }, null, null);
     }
 
     public void sendMessage(Message message) {
         Log.i("testing", "sendMessage()");
         HashMap<String, String> body = new HashMap<String, String>();
 
-        body.put("fireBaseUserIdToken", mFireBaseUserIdToken);
+        body.put("firebaseUserIdToken", mFireBaseUserIdToken);
         body.put("content", message.getContent());
         body.put("senderId", Integer.toString(message.getSenderId()));
         body.put("receiverId", Integer.toString(message.getReceiverId()));
         body.put("sentDate", message.getSentDate().toString());
 
-        sendPostRequest(SEND_CHAT_MESSAGE_URL, body, null, null);
+        sendPostRequest(SEND_CHAT_MESSAGE_URL, body, null, null, null);
     }
 
     public void blockContact(Contact contact) {
@@ -100,39 +99,28 @@ public class NetworkHandler {
         HashMap<String, String> body = new HashMap<String, String>();
         String userId = Integer.toString(PreferencesManager.getUserId(mContext));
 
-        body.put("fireBaseUserIdToken", mFireBaseUserIdToken);
+        body.put("firebaseUserIdToken", mFireBaseUserIdToken);
         body.put("userId", userId);
         body.put("subjectId", Integer.toString(contact.getId()));
 
 
-        sendPostRequest(url, body, null, null);
+        sendPostRequest(url, body, null, null, null);
     }
 
     public void searchForContact(String searchString, Response.Listener<JSONObject> responseListener, Response.ErrorListener errorListener) {
         Log.i("testing", "searchForContact()");
+        final String requestTag = "searchForContact";
+        cancelRequests(requestTag);
+
         HashMap<String, String> body = new HashMap<String, String>();
 
         body.put("firebaseUserIdToken", mFireBaseUserIdToken);
         body.put("searchString", searchString);
-
-        sendPostRequest(SEARCH_FOR_CONTACT_URL, body, responseListener, errorListener);
+//        body.put("searchString", "Símon Rafn Bjarnason");
+        sendPostRequest(SEARCH_FOR_CONTACT_URL, body, responseListener, errorListener, requestTag);
     }
 
-    /*new Response.Listener<JSONObject>() {
-        @Override
-        public void onResponse(JSONObject response) {
-            Log.i("testing", response.toString());
-            try {
-                // TODO: send the response to the correct place, response should include userId and username
-                int userId = Integer.getInteger(response.getString("userId"));
-                String username = response.getString("username");
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-        }
-    }, null);*/
-
-    private void sendPostRequest(String url, HashMap<String, String> requestBody, Response.Listener<JSONObject> responseListener, Response.ErrorListener errorListener) {
+    private void sendPostRequest(String url, HashMap<String, String> requestBody, Response.Listener<JSONObject> responseListener, Response.ErrorListener errorListener, String TAG) {
         Log.i("testing", "sendPostRequest()");
 
         if(errorListener == null) {
@@ -154,7 +142,15 @@ public class NetworkHandler {
 
         JsonObjectRequest req = new JsonObjectRequest(SERVER_URL+url, new JSONObject(requestBody), responseListener, errorListener);
 
+        if(TAG != null) req.setTag(TAG);
+
         // add the request object to the queue to be executed
         mQueue.add(req);
+    }
+
+    private void cancelRequests(String TAG) {
+        if(mQueue != null) {
+            mQueue.cancelAll(TAG);
+        }
     }
 }

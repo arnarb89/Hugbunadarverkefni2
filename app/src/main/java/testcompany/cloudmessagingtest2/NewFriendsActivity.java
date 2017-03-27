@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -79,32 +80,34 @@ public class NewFriendsActivity extends Activity {
                 Response.Listener<JSONObject> responseListener = new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
-                        int userId = 0;
-                        String username = "";
+//                        int userId = 0;
+//                        String username = "";
                         try {
-                            userId = Integer.getInteger(response.getString("userId"));
-                            username = response.getString("username");
+                            final int userId = response.getInt("userId");
+                            final String username = response.getString("username");
+                            Log.i("testing", "userId: " + userId + " username: " + username);
+
+//                            final int userId_final = userId;
+//                            final String username_final = username;
+
+                            addContactButton.setTextColor(getResources().getColor(R.color.darkgreen));
+                            addContactButton.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    contactsManager.addContact(new Contact(userId, username, false));
+                                    Toast.makeText(NewFriendsActivity.this, "Contact added.", Toast.LENGTH_SHORT).show();
+                                }
+                            });
                         } catch (JSONException e) {
                             e.printStackTrace();
-                            Toast.makeText(NewFriendsActivity.this, "There was an error.", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(NewFriendsActivity.this, "No user by that name.", Toast.LENGTH_SHORT).show();
                         }
-                        final int userId_final = userId;
-                        final String username_final = username;
-
-                        addContactButton.setTextColor(getResources().getColor(R.color.darkgreen));
-                        addContactButton.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                contactsManager.addContact(new Contact(userId_final, username_final, false));
-                                Toast.makeText(NewFriendsActivity.this, "Contact added.", Toast.LENGTH_SHORT).show();
-                            }
-                        });
                     }
                 };
                 Response.ErrorListener errorListener = new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        Toast.makeText(NewFriendsActivity.this, "There was an error.", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(NewFriendsActivity.this, "No user by that name.", Toast.LENGTH_SHORT).show();
                         addContactButton.setTextColor(getResources().getColor(R.color.darkred));
                         addContactButton.setOnClickListener(new View.OnClickListener() {
                             @Override
@@ -114,7 +117,7 @@ public class NewFriendsActivity extends Activity {
 
                     }
                 };
-                contactsManager.globalSearchForUsername(searchInput.toString(), responseListener,errorListener );
+                contactsManager.globalSearchForUsername(searchInput.toString(), responseListener, errorListener);
             }
         });
 
