@@ -108,16 +108,16 @@ public class ContactsDatabaseHelper extends SQLiteOpenHelper {
             new String[] {String.valueOf(id)},
             null, null, null, null
         );
-        if(cursor != null)
-            cursor.moveToFirst();
+        Contact contact = null;
+        if(cursor != null && cursor.getCount() > 0) {
+            contact = new Contact(
+                    Integer.parseInt(cursor.getString(0)),
+                    cursor.getString(1),
+                    parseBoolean(cursor.getString(2))
+            );
+            cursor.close();
+        }
 
-        Contact contact = new Contact(
-            Integer.parseInt(cursor.getString(0)),
-            cursor.getString(1),
-            parseBoolean(cursor.getString(2))
-        );
-
-        cursor.close();
         return contact;
     }
 
