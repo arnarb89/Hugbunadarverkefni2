@@ -94,7 +94,8 @@ public class NewFriendsActivity extends Activity {
                             addContactButton.setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View v) {
-                                    contactsManager.addContact(new Contact(userId, username, false));
+                                    //contactsManager.addContact(new Contact(userId, username, false));
+                                    contactsManager.addRequest(new Contact(userId, username, false));
                                     Toast.makeText(NewFriendsActivity.this, "Contact added.", Toast.LENGTH_SHORT).show();
                                 }
                             });
