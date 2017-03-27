@@ -56,17 +56,22 @@ public class RecentConversationsAdapter extends BaseAdapter {
         convertView= layoutInflater.inflate(R.layout.recent_conversations_list_item, parent, false);
 
         TextView nameView=(TextView)convertView.findViewById(R.id.nameField);
+        TextView timeView=(TextView)convertView.findViewById(R.id.timeField);
+        TextView messageView=(TextView)convertView.findViewById(R.id.messageField);
+
         if(thisData.getSenderId()==yourId){
             nameView.setText(contactManager.getContactById(thisData.getReceiverId()).getUsername());
+            messageView.setText("You said: "+thisData.getContent());
         }else{
             nameView.setText(contactManager.getContactById(thisData.getSenderId()).getUsername());
+            messageView.setText(contactManager.getContactById(thisData.getSenderId()).getUsername()+" says: "+thisData.getContent());
         }
 
-        TextView timeView=(TextView)convertView.findViewById(R.id.timeField);
+
         timeView.setText(thisData.getSentDate().toString());
 
-        TextView messageView=(TextView)convertView.findViewById(R.id.messageField);
-        messageView.setText(contactManager.getContactById(thisData.getSenderId()).getUsername()+" says: "+thisData.getContent());
+
+
 
 
 

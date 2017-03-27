@@ -34,7 +34,7 @@ public class ConversationActivity extends Activity {
     MessageManager messageManager;
 
     final List<Message> previousMessages = new ArrayList<Message>();
-    final ConversationAdapter conversationAdapter = new ConversationAdapter(previousMessages, this.getBaseContext());
+    ConversationAdapter conversationAdapter;
     int idOfWhoYouAreTalkingToTemp;
 
     @Override
@@ -62,8 +62,11 @@ public class ConversationActivity extends Activity {
             previousMessages.add(previousMessagesTemp.get(i));
         }
 
+        contactNameButton.setText(contactManager.getContactById(IdOfWhoYouAreTalkingTo).getUsername());
+
         // Populate the conversation list with items
         //final ConversationAdapter conversationAdapter = new ConversationAdapter(previousMessages, this.getBaseContext());
+        conversationAdapter = new ConversationAdapter(previousMessages, ConversationActivity.this);
         conversationListView.setAdapter(conversationAdapter);
         conversationAdapter.notifyDataSetChanged();
 
@@ -87,6 +90,7 @@ public class ConversationActivity extends Activity {
 
                 previousMessages.add(0, message);
                 conversationAdapter.notifyDataSetChanged();
+                messageInputField.setText("");
             }
         });
 
@@ -126,6 +130,8 @@ public class ConversationActivity extends Activity {
             }
         });
     }
+
+
 
     public BroadcastReceiver mMessageReceiver = new BroadcastReceiver() {
         @Override
