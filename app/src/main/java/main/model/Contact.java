@@ -1,13 +1,11 @@
-package testcompany.cloudmessagingtest2;
-
-import java.util.HashMap;
+package main.model;
 
 public class Contact {
     private boolean isBlocked;
     private int id;
     private String username;
 
-    Contact(int id, String username, boolean isBlocked){
+    public Contact(int id, String username, boolean isBlocked){
         this.isBlocked = isBlocked;
         this.id = id;
         this.username = username;

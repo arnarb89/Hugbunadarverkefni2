@@ -1,4 +1,4 @@
-package testcompany.cloudmessagingtest2;
+package main.managers;
 
 import android.content.Context;
 
@@ -7,6 +7,8 @@ import com.android.volley.Response;
 import org.json.JSONObject;
 
 import java.util.List;
+
+import main.model.Contact;
 
 public class ContactManager {
 
@@ -56,7 +58,7 @@ public class ContactManager {
     }
 
     public void declineFriendRequest(Contact contact) {
-        mNetworkHandler.declineRequest(contact);
+        mNetworkHandler.declineFriendRequest(contact);
         mDbHelper.deleteRequest(contact);
     }
 

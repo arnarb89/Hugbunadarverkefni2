@@ -15,6 +15,9 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import main.managers.MessageDatabaseHelper;
+import main.model.Message;
+
 public class MessageDatabaseHelperInstrumentedTest {
 
     MessageDatabaseHelper dbHelper;

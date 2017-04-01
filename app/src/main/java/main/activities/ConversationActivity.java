@@ -1,4 +1,4 @@
-package testcompany.cloudmessagingtest2;
+package main.activities;
 
 import android.app.Activity;
 import android.content.BroadcastReceiver;
@@ -19,6 +19,13 @@ import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+
+import main.adapters.ConversationAdapter;
+import main.managers.ContactManager;
+import main.managers.MessageManager;
+import main.model.Message;
+import main.managers.PreferencesHelper;
+import testcompany.cloudmessagingtest2.R;
 
 public class ConversationActivity extends Activity {
 
@@ -42,7 +49,7 @@ public class ConversationActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_conversation);
         final int IdOfWhoYouAreTalkingTo = getIntent().getIntExtra("KEY_contactId",0);
-        final int yourId = PreferencesManager.getUserId(ConversationActivity.this);
+        final int yourId = PreferencesHelper.getUserId(ConversationActivity.this);
         idOfWhoYouAreTalkingToTemp = IdOfWhoYouAreTalkingTo;
 
         contactManager = new ContactManager(ConversationActivity.this);

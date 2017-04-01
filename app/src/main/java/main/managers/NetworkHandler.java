@@ -1,4 +1,4 @@
-package testcompany.cloudmessagingtest2;
+package main.managers;
 
 import android.content.Context;
 import android.util.Log;
@@ -8,12 +8,14 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
-import com.google.gson.JsonParser;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.HashMap;
+
+import main.model.Contact;
+import main.model.Message;
 
 /**
  * Created by Notandi on 3/19/2017.
@@ -37,7 +39,7 @@ public class NetworkHandler {
 
     public NetworkHandler(Context context) {
         mQueue = Volley.newRequestQueue(context);
-        mFireBaseUserIdToken = PreferencesManager.getFirebaseUserIdToken(context);
+        mFireBaseUserIdToken = PreferencesHelper.getFirebaseUserIdToken(context);
         mContext = context;
     }
 
@@ -55,7 +57,7 @@ public class NetworkHandler {
                         Log.i("testing", response.toString());
                         try {
                             String userId = response.getString("userId");
-                            PreferencesManager.setUserId(mContext, Integer.parseInt(userId));
+                            PreferencesHelper.setUserId(mContext, Integer.parseInt(userId));
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
@@ -109,7 +111,7 @@ public class NetworkHandler {
     private void generalContactRequest(String url, Contact contact) {
         Log.i("testing", "generalContactRequest()");
         HashMap<String, String> body = new HashMap<String, String>();
-        String userId = Integer.toString(PreferencesManager.getUserId(mContext));
+        String userId = Integer.toString(PreferencesHelper.getUserId(mContext));
 
         body.put("firebaseUserIdToken", mFireBaseUserIdToken);
         body.put("userId", userId);

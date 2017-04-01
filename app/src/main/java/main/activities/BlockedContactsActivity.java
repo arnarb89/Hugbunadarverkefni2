@@ -1,4 +1,4 @@
-package testcompany.cloudmessagingtest2;
+package main.activities;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -13,6 +13,12 @@ import android.widget.ListView;
 import android.widget.PopupMenu;
 
 import java.util.List;
+
+import main.adapters.ContactsListAdapter;
+import main.managers.ContactManager;
+import main.managers.LoginManager;
+import main.model.Contact;
+import testcompany.cloudmessagingtest2.R;
 
 public class BlockedContactsActivity extends Activity {
 

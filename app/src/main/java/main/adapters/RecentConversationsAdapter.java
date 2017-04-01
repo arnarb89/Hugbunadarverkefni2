@@ -1,4 +1,4 @@
-package testcompany.cloudmessagingtest2;
+package main.adapters;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -8,6 +8,11 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 import java.util.List;
+
+import main.managers.ContactManager;
+import main.model.Message;
+import main.managers.PreferencesHelper;
+import testcompany.cloudmessagingtest2.R;
 
 /**
  * Created by arnardesktop on 5.3.2017.
@@ -51,7 +56,7 @@ public class RecentConversationsAdapter extends BaseAdapter {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         Message thisData =  data.get(position);
-        int yourId = PreferencesManager.getUserId(context);
+        int yourId = PreferencesHelper.getUserId(context);
 
         convertView= layoutInflater.inflate(R.layout.recent_conversations_list_item, parent, false);
 

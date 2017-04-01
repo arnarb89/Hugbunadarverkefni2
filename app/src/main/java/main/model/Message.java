@@ -1,4 +1,4 @@
-package testcompany.cloudmessagingtest2;
+package main.model;
 
 import java.util.Date;
 import java.util.HashMap;
@@ -9,7 +9,7 @@ public class Message {
     private final int mReceiverId;
     private final Date mSentTime;
 
-    Message(String content, int senderId, int receiverId, Date sentTime){
+    public Message(String content, int senderId, int receiverId, Date sentTime){
         mContent = content;
         mSenderId = senderId;
         mReceiverId = receiverId;
