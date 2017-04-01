@@ -13,11 +13,11 @@ import static java.lang.Boolean.parseBoolean;
 
 public class ContactDatabaseHelper extends SQLiteOpenHelper {
 
-    private static final int mDATABASE_VERSION = 2;
+    private static final int mDATABASE_VERSION = 3;
     private static final String mDATABASE_NAME = "contacts_manager";
 
     private static final String mTABLE_CONTACTS = "contacts";
-    private static final String mTABLE_REQUESTS = "contacts";
+    private static final String mTABLE_REQUESTS = "requests";
 
     private static final String mKEY_USERID = "id";
     private static final String mKEY_USERNAME = "username";
@@ -26,18 +26,18 @@ public class ContactDatabaseHelper extends SQLiteOpenHelper {
     private static final String mCREATE_CONTACTS_TABLE =
             "CREATE TABLE IF NOT EXISTS "
             + mTABLE_CONTACTS
-            + "("
+            + " ( "
             + mKEY_USERID + " INTEGER PRIMARY KEY, "
             + mKEY_USERNAME + " TEXT, "
             + mKEY_BLOCKED + " BOOLEAN"
-            + ")";
+            + " ) ";
     private static final String mCREATE_REQUESTS_TABLE =
             "CREATE TABLE IF NOT EXISTS "
-            + mTABLE_CONTACTS
-            + "("
+            + mTABLE_REQUESTS
+            + " ( "
             + mKEY_USERID + " INTEGER PRIMARY KEY, "
-            + mKEY_USERNAME + " TEXT, "
-            + ")";
+            + mKEY_USERNAME + " TEXT "
+            + " ) ";
 
     public ContactDatabaseHelper(Context context) {
         super(context, mDATABASE_NAME, null, mDATABASE_VERSION);
