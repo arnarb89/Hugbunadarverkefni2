@@ -1,4 +1,4 @@
-package testcompany.cloudmessagingtest2;
+package main.activities;
 
 import android.app.Activity;
 import android.content.BroadcastReceiver;
@@ -19,6 +19,14 @@ import android.widget.PopupMenu;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import main.adapters.RecentConversationsAdapter;
+import main.managers.ContactManager;
+import main.managers.LoginManager;
+import main.managers.MessageManager;
+import main.model.Message;
+import main.managers.PreferencesHelper;
+import testcompany.cloudmessagingtest2.R;
 
 public class RecentConversationsActivity extends Activity {
 
@@ -44,7 +52,7 @@ public class RecentConversationsActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recentconversations);
 
-        final int yourId = PreferencesManager.getUserId(RecentConversationsActivity.this);
+        final int yourId = PreferencesHelper.getUserId(RecentConversationsActivity.this);
 
         contactsManager = new ContactManager(RecentConversationsActivity.this);
 

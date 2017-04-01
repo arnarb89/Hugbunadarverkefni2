@@ -1,7 +1,7 @@
 
 
 
-package testcompany.cloudmessagingtest2;
+package main.adapters;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -12,6 +12,10 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import java.util.List;
+
+import main.managers.ContactManager;
+import main.model.Contact;
+import testcompany.cloudmessagingtest2.R;
 
 /**
  * Created by arnardesktop on 5.3.2017.

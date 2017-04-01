@@ -1,4 +1,4 @@
-package testcompany.cloudmessagingtest2;
+package main.managers;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -11,6 +11,9 @@ import android.util.Log;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+
+import main.model.Contact;
+import main.model.Message;
 
 public class MessageDatabaseHelper extends SQLiteOpenHelper {
 

@@ -1,7 +1,4 @@
-
-
-
-package testcompany.cloudmessagingtest2;
+package main.adapters;
 
         import android.content.Context;
         import android.view.LayoutInflater;
@@ -12,18 +9,21 @@ package testcompany.cloudmessagingtest2;
 
         import java.util.List;
 
+        import main.model.Contact;
+        import testcompany.cloudmessagingtest2.R;
+
 /**
  * Created by arnardesktop on 5.3.2017.
  */
 
-public class ConversationAdapter extends BaseAdapter {
+public class ContactsListAdapter extends BaseAdapter {
 
-    List<Message> data;
+    List<Contact> data;
     Context context;
 
     LayoutInflater layoutInflater;
 
-    public ConversationAdapter(List<Message> data, Context context) {
+    public ContactsListAdapter(List<Contact> data, Context context) {
         super();
         this.data = data;
         this.context = context;
@@ -50,23 +50,12 @@ public class ConversationAdapter extends BaseAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        Message thisData = data.get(position);
-        int yourId = PreferencesManager.getUserId(context);
+        Contact thisData = data.get(position);
 
-        if(thisData.getSenderId()==yourId){
-            convertView= layoutInflater.inflate(R.layout.conversation_you_list_item, parent, false);
-        }else{
-            convertView= layoutInflater.inflate(R.layout.conversation_to_you_list_item, parent, false);
-        }
+        convertView= layoutInflater.inflate(R.layout.contacts_list_element, parent, false);
 
-
-        TextView timeView=(TextView)convertView.findViewById(R.id.timeTextView);
-        timeView.setText(thisData.getSentDate().toString());
-
-        TextView messageView=(TextView)convertView.findViewById(R.id.messageTextView);
-        messageView.setText(thisData.getContent());
-
-
+        TextView nameView=(TextView)convertView.findViewById(R.id.contactsListElementNameField);
+        nameView.setText(thisData.getUsername());
 
         return convertView;
     }

@@ -9,7 +9,7 @@
     android:paddingRight="16dip"
     android:paddingTop="16dip"
     android:orientation="vertical"
-    tools:context="testcompany.cloudmessagingtest2.RecentConversationsActivity"
+    tools:context="main.activities.RecentConversationsActivity"
     android:focusable="true"
     android:focusableInTouchMode="true"
     >
