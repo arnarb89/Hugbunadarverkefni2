@@ -96,18 +96,16 @@ public class NewFriendsActivity extends Activity {
                                 Response.Listener<JSONObject> responseListener = new Response.Listener<JSONObject>() {
                                     @Override
                                     public void onResponse(JSONObject response) {
-//                        int userId = 0;
-//                        String username = "";
+                                        Log.i("testing", "****** Response from globalSearchForUsername");
                                         try {
                                             final int userId = response.getInt("userId");
                                             final String username = response.getString("username");
                                             Log.i("testing", "userId: " + userId + " username: " + username);
 
-
-//                            final int userId_final = userId;
-//                            final String username_final = username;
-
+                                            Log.i("testing", "****** Response from globalSearchForUsername, Try, set green.");
                                             addContactButton.setTextColor(getResources().getColor(R.color.darkgreen));
+                                            Log.i("testing", "****** Response from globalSearchForUsername, Try, should be green.");
+
                                             addContactButton.setOnClickListener(new View.OnClickListener() {
                                                 @Override
                                                 public void onClick(View v) {
@@ -125,6 +123,7 @@ public class NewFriendsActivity extends Activity {
                                 Response.ErrorListener errorListener = new Response.ErrorListener() {
                                     @Override
                                     public void onErrorResponse(VolleyError error) {
+                                        Log.i("testing", "****** Response from globalSearchForUsername");
                                         Toast.makeText(NewFriendsActivity.this, "No user by that name.", Toast.LENGTH_SHORT).show();
                                         addContactButton.setTextColor(getResources().getColor(R.color.darkred));
                                         addContactButton.setOnClickListener(new View.OnClickListener() {
@@ -135,6 +134,7 @@ public class NewFriendsActivity extends Activity {
 
                                     }
                                 };
+                                Log.i("testing", "****** About to run globalSearchForUsername");
                                 contactsManager.globalSearchForUsername(s.toString(), responseListener, errorListener);
                             }
                         });
@@ -146,6 +146,7 @@ public class NewFriendsActivity extends Activity {
             }
 
             public void onTextChanged(CharSequence searchInput, int start, int before, int count) {
+                addContactButton.setTextColor(getResources().getColor(R.color.darkred));
                 if(timer != null){
                     timer.cancel();
                 }
