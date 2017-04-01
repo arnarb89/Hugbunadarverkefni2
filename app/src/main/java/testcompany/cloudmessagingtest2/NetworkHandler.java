@@ -21,13 +21,15 @@ import java.util.HashMap;
 
 public class NetworkHandler {
     private static final String SERVER_URL = "http://e28-104.gardur.hi.is:8008";
-    private static final String REGISTRATION_URL = "/register";
-    private static final String SEND_CHAT_MESSAGE_URL = "/sendMessage";
-    private static final String BLOCK_CONTACT_URL = "/contact/block";
-    private static final String UNBLOCK_CONTACT_URL = "/contact/unblock";
-    private static final String ADD_CONTACT_URL = "/contact/add";
-    private static final String DELETE_CONTACT_URL = "/contact/delete";
-    private static final String SEARCH_FOR_CONTACT_URL = "/searchForContact";
+    private static final String REGISTRATION_URL = SERVER_URL + "/register";
+    private static final String SEND_CHAT_MESSAGE_URL = SERVER_URL + "/sendMessage";
+    private static final String BLOCK_CONTACT_URL = SERVER_URL + "/contact/block";
+    private static final String UNBLOCK_CONTACT_URL = SERVER_URL + "/contact/unblock";
+    private static final String ADD_CONTACT_URL = SERVER_URL + "/contact/add";
+    private static final String DELETE_CONTACT_URL = SERVER_URL + "/contact/delete";
+    private static final String SEARCH_FOR_CONTACT_URL = SERVER_URL + "/searchForContact";
+    private static final String ACCEPT_FRIEND_REQUEST_URL = SERVER_URL + "/contact/acceptFriendRequest";
+    private static final String DECLINE_FRIEND_REQUEST_URL =  SERVER_URL + "/contact/declineFriendRequest";
 
     private RequestQueue mQueue;
     private String mFireBaseUserIdToken;
@@ -71,7 +73,7 @@ public class NetworkHandler {
         body.put("receiverId", Integer.toString(message.getReceiverId()));
         body.put("sentDate", message.getSentDate().toString());
 
-        sendPostRequest(SERVER_URL+SEND_CHAT_MESSAGE_URL, body, null, null, null);
+        sendPostRequest(SEND_CHAT_MESSAGE_URL, body, null, null, null);
     }
 
     public void blockContact(Contact contact) {
@@ -81,17 +83,27 @@ public class NetworkHandler {
 
     public void unblockContact(Contact contact) {
         Log.i("testing", "unblockContact()");
-        generalContactRequest(SERVER_URL+UNBLOCK_CONTACT_URL, contact);
+        generalContactRequest(UNBLOCK_CONTACT_URL, contact);
     }
 
     public void sendFriendRequest(Contact contact) {
         Log.i("testing", "insertContact()");
-        generalContactRequest(SERVER_URL+ADD_CONTACT_URL, contact);
+        generalContactRequest(ADD_CONTACT_URL, contact);
     }
 
     public void deleteContact(Contact contact) {
         Log.i("testing", "deleteContact()");
-        generalContactRequest(SERVER_URL+DELETE_CONTACT_URL, contact);
+        generalContactRequest(DELETE_CONTACT_URL, contact);
+    }
+
+    public void declineFriendRequest(Contact contact) {
+        Log.i("testing", "declineFriendRequest()");
+        generalContactRequest(DECLINE_FRIEND_REQUEST_URL, contact);
+    }
+
+    public void acceptFriendRequest(Contact contact) {
+        Log.i("testing", "acceptFriendRequest()");
+        generalContactRequest(ACCEPT_FRIEND_REQUEST_URL, contact);
     }
 
     private void generalContactRequest(String url, Contact contact) {
@@ -102,7 +114,6 @@ public class NetworkHandler {
         body.put("firebaseUserIdToken", mFireBaseUserIdToken);
         body.put("userId", userId);
         body.put("subjectId", Integer.toString(contact.getId()));
-
 
         sendPostRequest(url, body, null, null, null);
     }
@@ -116,7 +127,6 @@ public class NetworkHandler {
 
         body.put("firebaseUserIdToken", mFireBaseUserIdToken);
         body.put("searchString", searchString);
-//        body.put("searchString", "Símon Rafn Bjarnason");
         sendPostRequest(SEARCH_FOR_CONTACT_URL, body, responseListener, errorListener, requestTag);
     }
 
@@ -152,9 +162,5 @@ public class NetworkHandler {
         if(mQueue != null) {
             mQueue.cancelAll(TAG);
         }
-    }
-
-//    TODO: finish
-    public void declineRequest(Contact contact) {
     }
 }

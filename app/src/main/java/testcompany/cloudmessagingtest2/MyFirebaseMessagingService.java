@@ -36,6 +36,11 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
     private static final String TAG = "MyFirebaseMsgService";
 
+    private static final String chatMessageType = "chatMessage";
+    private static final String friendRequestType = "friendRequest";
+    private static final String friendResponseType = "friendResponse";
+
+
     /**
      * Called when message is received.
      *
@@ -45,6 +50,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
         Log.i("testing", "MyFirebaseMessagingService.onMessageReceived()");
+
 
         // [START_EXCLUDE]
         // There are two types of messages data messages and notification messages. Data messages are handled
@@ -65,25 +71,42 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         if (remoteMessage.getData().size() > 0) {
             Log.i("testing", "MyFirebaseMessagingService.onMessageReceived(), remoteMessage.getData(): " + remoteMessage.getData());
 
-            String content = remoteMessage.getData().get("content");
             int senderId = Integer.getInteger(remoteMessage.getData().get("senderId"));
             int receiverId = Integer.getInteger(remoteMessage.getData().get("receiverId"));
-            Date sentTime = new Date(Long.parseLong(remoteMessage.getData().get("sentTime")));
 
-            Message message = new Message(content, senderId, receiverId, sentTime);
+            switch(remoteMessage.getData().get("messageType")) {
+                case chatMessageType: {
+                    String content = remoteMessage.getData().get("content");
+                    Date sentTime = new Date(Long.parseLong(remoteMessage.getData().get("sentTime")));
 
-            MessageManager messageManager = new MessageManager(getBaseContext());
-            messageManager.addMessage(message);
+                    Message message = new Message(content, senderId, receiverId, sentTime);
 
-            Intent intent1 = new Intent("update_conversation");
-            intent1.putExtra("content", message.getContent());
-            intent1.putExtra("senderId", message.getSenderId());
-            intent1.putExtra("receiverId", message.getReceiverId());
-            intent1.putExtra("sentDate", message.getSentDate().getTime());
-            LocalBroadcastManager.getInstance(getBaseContext()).sendBroadcast(intent1);
+                    MessageManager messageManager = new MessageManager(getBaseContext());
+                    messageManager.addMessage(message);
 
-            Intent intent2 = new Intent("update_recent_conversations");
-            LocalBroadcastManager.getInstance(getBaseContext()).sendBroadcast(intent2);
+                    Intent intent1 = new Intent("update_conversation");
+                    intent1.putExtra("content", message.getContent());
+                    intent1.putExtra("senderId", message.getSenderId());
+                    intent1.putExtra("receiverId", message.getReceiverId());
+                    intent1.putExtra("sentDate", message.getSentDate().getTime());
+                    LocalBroadcastManager.getInstance(getBaseContext()).sendBroadcast(intent1);
+
+                    Intent intent2 = new Intent("update_recent_conversations");
+                    LocalBroadcastManager.getInstance(getBaseContext()).sendBroadcast(intent2);
+                }
+                case friendRequestType: {
+                    String senderUsername = remoteMessage.getData().get("senderUsername");
+                    // TODO: send the friend request to the correct place in the database and probably notify the user somehow
+                }
+                case friendResponseType: {
+                    // TODO: add the contact to your contact list in the database
+                }
+                default: {
+                    throw new Error("Received a message not fitting any of the message type categories.");
+                }
+            }
+
+
         }
 
         // Check if message contains a notification payload.
