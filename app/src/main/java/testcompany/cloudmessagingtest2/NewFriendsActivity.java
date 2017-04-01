@@ -103,6 +103,7 @@ public class NewFriendsActivity extends Activity {
                                             final String username = response.getString("username");
                                             Log.i("testing", "userId: " + userId + " username: " + username);
 
+
 //                            final int userId_final = userId;
 //                            final String username_final = username;
 
@@ -111,7 +112,7 @@ public class NewFriendsActivity extends Activity {
                                                 @Override
                                                 public void onClick(View v) {
                                                     //contactsManager.addContact(new Contact(userId, username, false));
-                                                    contactsManager.storeRequest(new Contact(userId, username, false));
+                                                    contactsManager.sendFriendRequest(new Contact(userId, username, false));
                                                     Toast.makeText(NewFriendsActivity.this, "Contact added.", Toast.LENGTH_SHORT).show();
                                                 }
                                             });
