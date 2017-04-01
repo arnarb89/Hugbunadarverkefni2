@@ -113,7 +113,7 @@ public class NewFriendsActivity extends Activity {
                                                 public void onClick(View v) {
                                                     //contactsManager.addContact(new Contact(userId, username, false));
                                                     contactsManager.sendFriendRequest(new Contact(userId, username, false));
-                                                    Toast.makeText(NewFriendsActivity.this, "Contact added.", Toast.LENGTH_SHORT).show();
+                                                    Toast.makeText(NewFriendsActivity.this, "Friend Request Sent.", Toast.LENGTH_SHORT).show();
                                                 }
                                             });
                                         } catch (JSONException e) {
