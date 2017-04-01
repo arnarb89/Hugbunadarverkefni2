@@ -18,6 +18,9 @@ import com.android.volley.VolleyError;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.Timer;
+import java.util.TimerTask;
+
 public class NewFriendsActivity extends Activity {
 
     LoginManager loginManager;
@@ -35,6 +38,9 @@ public class NewFriendsActivity extends Activity {
 
     EditText lookForContactsEditText;
     Button addContactButton;
+
+    private Timer timer = new Timer();
+    private final long DELAY = 1000; // in ms
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,54 +77,77 @@ public class NewFriendsActivity extends Activity {
 
         lookForContactsEditText.addTextChangedListener(new TextWatcher() {
 
-            public void afterTextChanged(Editable s) {}
+            public void afterTextChanged(final Editable s) {
+                if (s.length() < 3){
+                    return;
+                }
+
+                timer = new Timer();
+                timer.schedule(new TimerTask() {
+                    @Override
+                    public void run() {
+
+                        runOnUiThread(new Runnable(){
+
+                            @Override
+                            public void run(){
+                                // update ui here
+
+                                Response.Listener<JSONObject> responseListener = new Response.Listener<JSONObject>() {
+                                    @Override
+                                    public void onResponse(JSONObject response) {
+//                        int userId = 0;
+//                        String username = "";
+                                        try {
+                                            final int userId = response.getInt("userId");
+                                            final String username = response.getString("username");
+                                            Log.i("testing", "userId: " + userId + " username: " + username);
+
+//                            final int userId_final = userId;
+//                            final String username_final = username;
+
+                                            addContactButton.setTextColor(getResources().getColor(R.color.darkgreen));
+                                            addContactButton.setOnClickListener(new View.OnClickListener() {
+                                                @Override
+                                                public void onClick(View v) {
+                                                    //contactsManager.addContact(new Contact(userId, username, false));
+                                                    contactsManager.addRequest(new Contact(userId, username, false));
+                                                    Toast.makeText(NewFriendsActivity.this, "Contact added.", Toast.LENGTH_SHORT).show();
+                                                }
+                                            });
+                                        } catch (JSONException e) {
+                                            e.printStackTrace();
+                                            Toast.makeText(NewFriendsActivity.this, "No user by that name.", Toast.LENGTH_SHORT).show();
+                                        }
+                                    }
+                                };
+                                Response.ErrorListener errorListener = new Response.ErrorListener() {
+                                    @Override
+                                    public void onErrorResponse(VolleyError error) {
+                                        Toast.makeText(NewFriendsActivity.this, "No user by that name.", Toast.LENGTH_SHORT).show();
+                                        addContactButton.setTextColor(getResources().getColor(R.color.darkred));
+                                        addContactButton.setOnClickListener(new View.OnClickListener() {
+                                            @Override
+                                            public void onClick(View v) {
+                                            }
+                                        });
+
+                                    }
+                                };
+                                contactsManager.globalSearchForUsername(s.toString(), responseListener, errorListener);
+                            }
+                        });
+                    }
+                }, DELAY);
+            }
 
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
             }
 
             public void onTextChanged(CharSequence searchInput, int start, int before, int count) {
-                Response.Listener<JSONObject> responseListener = new Response.Listener<JSONObject>() {
-                    @Override
-                    public void onResponse(JSONObject response) {
-//                        int userId = 0;
-//                        String username = "";
-                        try {
-                            final int userId = response.getInt("userId");
-                            final String username = response.getString("username");
-                            Log.i("testing", "userId: " + userId + " username: " + username);
-
-//                            final int userId_final = userId;
-//                            final String username_final = username;
-
-                            addContactButton.setTextColor(getResources().getColor(R.color.darkgreen));
-                            addContactButton.setOnClickListener(new View.OnClickListener() {
-                                @Override
-                                public void onClick(View v) {
-                                    //contactsManager.addContact(new Contact(userId, username, false));
-                                    contactsManager.addRequest(new Contact(userId, username, false));
-                                    Toast.makeText(NewFriendsActivity.this, "Contact added.", Toast.LENGTH_SHORT).show();
-                                }
-                            });
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                            Toast.makeText(NewFriendsActivity.this, "No user by that name.", Toast.LENGTH_SHORT).show();
-                        }
-                    }
-                };
-                Response.ErrorListener errorListener = new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        Toast.makeText(NewFriendsActivity.this, "No user by that name.", Toast.LENGTH_SHORT).show();
-                        addContactButton.setTextColor(getResources().getColor(R.color.darkred));
-                        addContactButton.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                            }
-                        });
-
-                    }
-                };
-                contactsManager.globalSearchForUsername(searchInput.toString(), responseListener, errorListener);
+                if(timer != null){
+                    timer.cancel();
+                }
             }
         });
 
