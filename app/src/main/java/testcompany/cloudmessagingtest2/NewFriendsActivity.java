@@ -21,7 +21,7 @@ import org.json.JSONObject;
 public class NewFriendsActivity extends Activity {
 
     LoginManager loginManager;
-    ContactsManager contactsManager;
+    ContactManager contactsManager;
 
     ListView listView;
     EditText editText;
@@ -41,7 +41,7 @@ public class NewFriendsActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_friends);
 
-        contactsManager = new ContactsManager(getBaseContext());
+        contactsManager = new ContactManager(getBaseContext());
 
         listView = (ListView) findViewById(R.id.friendRequestsList);
         editText = (EditText) findViewById(R.id.btnSearchContacts);
@@ -94,8 +94,8 @@ public class NewFriendsActivity extends Activity {
                             addContactButton.setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View v) {
-                                    //contactsManager.addContact(new Contact(userId, username, false));
-                                    contactsManager.addRequest(new Contact(userId, username, false));
+                                    //contactsManager.insertContact(new Contact(userId, username, false));
+                                    contactsManager.storeRequest(new Contact(userId, username, false));
                                     Toast.makeText(NewFriendsActivity.this, "Contact added.", Toast.LENGTH_SHORT).show();
                                 }
                             });

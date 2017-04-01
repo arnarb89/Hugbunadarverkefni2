@@ -17,7 +17,7 @@ import java.util.List;
 public class BlockedContactsActivity extends Activity {
 
     LoginManager loginManager;
-    ContactsManager contactManager;
+    ContactManager contactManager;
 
     ListView listView;
     EditText editText;
@@ -33,7 +33,7 @@ public class BlockedContactsActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_blocked_contacts);
 
-        contactManager = new ContactsManager(BlockedContactsActivity.this);
+        contactManager = new ContactManager(BlockedContactsActivity.this);
 
         listView = (ListView) findViewById(R.id.blockedContactsList);
         editText = (EditText) findViewById(R.id.btnSearchContacts);

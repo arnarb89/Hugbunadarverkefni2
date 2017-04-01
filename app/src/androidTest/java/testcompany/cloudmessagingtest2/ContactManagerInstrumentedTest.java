@@ -4,7 +4,6 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.support.test.InstrumentationRegistry;
 import android.support.test.runner.AndroidJUnit4;
-import android.util.Log;
 
 import junit.framework.Assert;
 
@@ -17,9 +16,9 @@ import java.util.List;
 import static org.junit.Assert.assertEquals;
 
 @RunWith(AndroidJUnit4.class)
-public class ContactsManagerInstrumentedTest {
+public class ContactManagerInstrumentedTest {
 
-    ContactsDatabaseHelper dbHelper;
+    ContactDatabaseHelper dbHelper;
     Contact haukur;
     Contact contact2;
     Contact blockedContact3;
@@ -27,7 +26,7 @@ public class ContactsManagerInstrumentedTest {
     @Before
     public void createDB() {
         Context appContext = InstrumentationRegistry.getTargetContext();
-        dbHelper = new ContactsDatabaseHelper(appContext);
+        dbHelper = new ContactDatabaseHelper(appContext);
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         dbHelper.dropTables();
         dbHelper.onCreate(db);
@@ -38,7 +37,7 @@ public class ContactsManagerInstrumentedTest {
     @Test
     public void requestAcceptable() {
 //        Add friend request
-        dbHelper.addRequest(haukur);
+        dbHelper.insertRequest(haukur);
         Contact contact;
         List<Contact> friendRequests = dbHelper.getRequests();
         contact = friendRequests.get(0);

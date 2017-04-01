@@ -11,9 +11,9 @@ import java.util.List;
 
 import static java.lang.Boolean.parseBoolean;
 
-public class ContactsDatabaseHelper extends SQLiteOpenHelper {
+public class ContactDatabaseHelper extends SQLiteOpenHelper {
 
-    private static final int mDATABASE_VERSION = 1;
+    private static final int mDATABASE_VERSION = 2;
     private static final String mDATABASE_NAME = "contacts_manager";
 
     private static final String mTABLE_CONTACTS = "contacts";
@@ -37,10 +37,9 @@ public class ContactsDatabaseHelper extends SQLiteOpenHelper {
             + "("
             + mKEY_USERID + " INTEGER PRIMARY KEY, "
             + mKEY_USERNAME + " TEXT, "
-            + mKEY_BLOCKED + " BOOLEAN"
             + ")";
 
-    public ContactsDatabaseHelper(Context context) {
+    public ContactDatabaseHelper(Context context) {
         super(context, mDATABASE_NAME, null, mDATABASE_VERSION);
     }
 
@@ -65,7 +64,7 @@ public class ContactsDatabaseHelper extends SQLiteOpenHelper {
         onCreate(db);
     }
 
-    private void addContact(String table, Contact contact) {
+    private void insertInto(String table, Contact contact) {
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues values = new ContentValues();
@@ -76,7 +75,7 @@ public class ContactsDatabaseHelper extends SQLiteOpenHelper {
         db.insert(table, null, values);
     }
 
-    private void deleteContact(String table, Contact contact) {
+    private void deleteFrom(String table, Contact contact) {
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues values = new ContentValues();
@@ -91,12 +90,12 @@ public class ContactsDatabaseHelper extends SQLiteOpenHelper {
         );
     }
 
-    public void addRequest(Contact contact) {
-        addContact(mTABLE_REQUESTS, contact);
+    public void insertRequest(Contact contact) {
+        insertInto(mTABLE_REQUESTS, contact);
     }
 
-    public void addContact(Contact contact) {
-        addContact(mTABLE_CONTACTS, contact);
+    public void insertContact(Contact contact) {
+        insertInto(mTABLE_CONTACTS, contact);
     }
 
     public Contact getContact(int id) {
@@ -178,28 +177,15 @@ public class ContactsDatabaseHelper extends SQLiteOpenHelper {
         return contacts;
     }
 
-    public void acceptRequest(Contact contact) {
-        deleteContact(mTABLE_REQUESTS, contact);
-        addContact(mTABLE_CONTACTS, contact);
-    }
-
-    public void declineRequest(Contact contact) {
-        deleteContact(mTABLE_REQUESTS, contact);
+    public void deleteRequest(Contact contact) {
+        deleteFrom(mTABLE_REQUESTS, contact);
     }
 
     public void deleteContact(Contact contact) {
-        deleteContact(mTABLE_CONTACTS, contact);
+        deleteFrom(mTABLE_CONTACTS, contact);
     }
 
-    public void blockContact(Contact contact) {
-        updateBlocked(contact, true);
-    }
-
-    public void unblockContact(Contact contact) {
-        updateBlocked(contact, false);
-    }
-
-    private void updateBlocked(Contact contact, boolean blocked) {
+    public void updateBlocked(Contact contact, boolean blocked) {
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues values = new ContentValues();

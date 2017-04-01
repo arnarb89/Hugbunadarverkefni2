@@ -15,7 +15,7 @@ import java.util.List;
 
 public class RecentConversationsAdapter extends BaseAdapter {
 
-    ContactsManager contactManager;
+    ContactManager contactManager;
 
     List<Message> data;
     Context context;
@@ -24,7 +24,7 @@ public class RecentConversationsAdapter extends BaseAdapter {
 
     public RecentConversationsAdapter(List<Message> data, Context context) {
         super();
-        contactManager = new ContactsManager(context);
+        contactManager = new ContactManager(context);
         this.data = data;
         this.context = context;
         layoutInflater = LayoutInflater.from(context);
