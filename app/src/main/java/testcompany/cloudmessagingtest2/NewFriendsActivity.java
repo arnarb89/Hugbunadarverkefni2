@@ -24,7 +24,7 @@ import java.util.TimerTask;
 public class NewFriendsActivity extends Activity {
 
     LoginManager loginManager;
-    ContactsManager contactsManager;
+    ContactManager contactsManager;
 
     ListView listView;
     EditText editText;
@@ -47,7 +47,7 @@ public class NewFriendsActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_friends);
 
-        contactsManager = new ContactsManager(getBaseContext());
+        contactsManager = new ContactManager(getBaseContext());
 
         listView = (ListView) findViewById(R.id.friendRequestsList);
         editText = (EditText) findViewById(R.id.btnSearchContacts);
