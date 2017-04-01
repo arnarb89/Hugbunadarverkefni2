@@ -13,11 +13,11 @@ import static java.lang.Boolean.parseBoolean;
 
 public class ContactDatabaseHelper extends SQLiteOpenHelper {
 
-    private static final int mDATABASE_VERSION = 2;
+    private static final int mDATABASE_VERSION = 3;
     private static final String mDATABASE_NAME = "contacts_manager";
 
     private static final String mTABLE_CONTACTS = "contacts";
-    private static final String mTABLE_REQUESTS = "contacts";
+    private static final String mTABLE_REQUESTS = "requests";
 
     private static final String mKEY_USERID = "id";
     private static final String mKEY_USERNAME = "username";
@@ -26,18 +26,18 @@ public class ContactDatabaseHelper extends SQLiteOpenHelper {
     private static final String mCREATE_CONTACTS_TABLE =
             "CREATE TABLE IF NOT EXISTS "
             + mTABLE_CONTACTS
-            + "("
+            + " ( "
             + mKEY_USERID + " INTEGER PRIMARY KEY, "
             + mKEY_USERNAME + " TEXT, "
             + mKEY_BLOCKED + " BOOLEAN"
-            + ")";
+            + " ) ";
     private static final String mCREATE_REQUESTS_TABLE =
             "CREATE TABLE IF NOT EXISTS "
-            + mTABLE_CONTACTS
-            + "("
+            + mTABLE_REQUESTS
+            + " ( "
             + mKEY_USERID + " INTEGER PRIMARY KEY, "
-            + mKEY_USERNAME + " TEXT, "
-            + ")";
+            + mKEY_USERNAME + " TEXT "
+            + " ) ";
 
     public ContactDatabaseHelper(Context context) {
         super(context, mDATABASE_NAME, null, mDATABASE_VERSION);
@@ -64,17 +64,6 @@ public class ContactDatabaseHelper extends SQLiteOpenHelper {
         onCreate(db);
     }
 
-    private void insertInto(String table, Contact contact) {
-        SQLiteDatabase db = this.getWritableDatabase();
-
-        ContentValues values = new ContentValues();
-        values.put(mKEY_USERNAME, contact.getUsername());
-        values.put(mKEY_USERID, contact.getId());
-        values.put(mKEY_BLOCKED, false);
-
-        db.insert(table, null, values);
-    }
-
     private void deleteFrom(String table, Contact contact) {
         SQLiteDatabase db = this.getWritableDatabase();
 
@@ -91,11 +80,24 @@ public class ContactDatabaseHelper extends SQLiteOpenHelper {
     }
 
     public void insertRequest(Contact contact) {
-        insertInto(mTABLE_REQUESTS, contact);
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        ContentValues values = new ContentValues();
+        values.put(mKEY_USERNAME, contact.getUsername());
+        values.put(mKEY_USERID, contact.getId());
+
+        db.insert(mTABLE_REQUESTS, null, values);
     }
 
     public void insertContact(Contact contact) {
-        insertInto(mTABLE_CONTACTS, contact);
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        ContentValues values = new ContentValues();
+        values.put(mKEY_USERNAME, contact.getUsername());
+        values.put(mKEY_USERID, contact.getId());
+        values.put(mKEY_BLOCKED, false);
+
+        db.insert(mTABLE_CONTACTS, null, values);
     }
 
     public Contact getContact(int id) {
@@ -205,7 +207,7 @@ public class ContactDatabaseHelper extends SQLiteOpenHelper {
 
         Cursor cursor = db.query(mTABLE_CONTACTS,
                 new String[]{mKEY_USERID, mKEY_USERNAME, mKEY_BLOCKED},
-                mKEY_USERNAME + " LIKE ? ",
+                mKEY_USERNAME + " LIKE '%?%' ",
                 new String[]{username},null, null, null
         );
 

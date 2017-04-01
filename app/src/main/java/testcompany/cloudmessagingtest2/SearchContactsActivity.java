@@ -39,9 +39,9 @@ public class SearchContactsActivity extends Activity {
         setContentView(R.layout.activity_search_contacts);
 
         context = this.getBaseContext();
-
+      
         contactManager = new ContactManager(SearchContactsActivity.this);
-
+      
         listView = (ListView) findViewById(R.id.searchContactsResultsListView);
         editText = (EditText) findViewById(R.id.btnSearchContacts);
 
@@ -55,13 +55,7 @@ public class SearchContactsActivity extends Activity {
 
         editText.addTextChangedListener(new TextWatcher() {
 
-            public void afterTextChanged(Editable s) {}
-
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
-
-            public void onTextChanged(CharSequence s, int start,
-                                      int before, int count) {
-
+            public void afterTextChanged(final Editable s) {
                 final List<Contact> contactListData = contactManager.searchContacts(s.toString());
                 ContactsListAdapter contactsListAdapter = new ContactsListAdapter(contactListData, context);
                 ListView listView = listView = (ListView) findViewById(R.id.searchContactsResultsListView);
@@ -96,14 +90,15 @@ public class SearchContactsActivity extends Activity {
                                 return true;
                             }
                         });
-
                         popup.show();
                         return true;
-
                     }
                 });
-
             }
+
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
+
+            public void onTextChanged(CharSequence s, int start, int before, int count) { }
         });
 
 
