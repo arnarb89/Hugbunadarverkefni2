@@ -9,18 +9,14 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class MessageDatabaseHelper extends SQLiteOpenHelper {
 
-    private static final int mDATABASE_VERSION = 1;
+    private static final int mDATABASE_VERSION = 2;
     private static final String mDATABASE_NAME = "message_manager";
-    private static final String mTABLE_NAME = "messages";
+    private static final String mTABLE_MESSAGES = "messages";
 
     private static final String mKEY_CONTENT = "content";
     private static final String mKEY_SENDERID = "sender";
@@ -29,7 +25,7 @@ public class MessageDatabaseHelper extends SQLiteOpenHelper {
 
     private static final String mCREATE_TABLE =
             "CREATE TABLE IF NOT EXISTS "
-                + mTABLE_NAME
+                + mTABLE_MESSAGES
                 + "("
                     + mKEY_CONTENT    + " text, "
                     + mKEY_SENDERID   + " integer, "
@@ -37,26 +33,26 @@ public class MessageDatabaseHelper extends SQLiteOpenHelper {
                     + mKEY_SENT_TIME + " integer "
                 + ")";
 
-    private static final String mMOST_RECENT_UNF = "most_recent_messages_unfiltered";
-    private static final String mMOST_RECENT = "most_recent_messages";
+    private static final String mVIEW_MOST_RECENT_UNF = "most_recent_messages_unfiltered";
+    private static final String mVIEW_MOST_RECENT = "most_recent_messages";
 
     private static final String mCREATE_MOST_RECENT_UNFILTERED =
-            "CREATE VIEW " + mMOST_RECENT_UNF
+            "CREATE VIEW " + mVIEW_MOST_RECENT_UNF
             + " AS SELECT " + mKEY_CONTENT
             + " , " + mKEY_SENDERID
             + " , " + mKEY_RECEIVERID
             + " ,  MAX( " + mKEY_SENT_TIME + " ) AS " + mKEY_SENT_TIME
-            + " FROM " + mTABLE_NAME
+            + " FROM " + mTABLE_MESSAGES
             + " GROUP BY " + mKEY_SENDERID + " , " + mKEY_RECEIVERID
             + " LIMIT 40 ";
 
     private static final String mCREATE_VIEW_MOST_RECENT =
-        "CREATE VIEW " + mMOST_RECENT + " AS "
-                + "SELECT a.* FROM " + mMOST_RECENT_UNF + " AS a LEFT JOIN " + mMOST_RECENT_UNF + " AS b "
+        "CREATE VIEW " + mVIEW_MOST_RECENT + " AS "
+                + "SELECT a.* FROM " + mVIEW_MOST_RECENT_UNF + " AS a LEFT JOIN " + mVIEW_MOST_RECENT_UNF + " AS b "
                     + "ON a." + mKEY_SENDERID + " = b." + mKEY_RECEIVERID + " AND a." + mKEY_RECEIVERID + " = b." + mKEY_SENDERID
                     + " WHERE a." + mKEY_SENT_TIME + ">= b." + mKEY_SENT_TIME + " OR b." + mKEY_SENDERID + " IS NULL "
             + " UNION "
-                + "SELECT b.* FROM " + mMOST_RECENT_UNF + " AS a LEFT JOIN " + mMOST_RECENT_UNF + " AS b "
+                + "SELECT b.* FROM " + mVIEW_MOST_RECENT_UNF + " AS a LEFT JOIN " + mVIEW_MOST_RECENT_UNF + " AS b "
                     + "ON a." + mKEY_SENDERID + " = b." + mKEY_RECEIVERID + " AND a." + mKEY_RECEIVERID + " = b." + mKEY_SENDERID
                     + " WHERE b." + mKEY_SENT_TIME + " > a." + mKEY_SENT_TIME;
 
@@ -73,17 +69,17 @@ public class MessageDatabaseHelper extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int i, int i1) {
-        db.execSQL("DROP TABLE IF EXISTS " + mTABLE_NAME);
-        db.execSQL("DROP VIEW IF EXISTS " + mMOST_RECENT_UNF);
-        db.execSQL("DROP VIEW IF EXISTS " + mMOST_RECENT);
+        db.execSQL("DROP TABLE IF EXISTS " + mTABLE_MESSAGES);
+        db.execSQL("DROP VIEW IF EXISTS " + mVIEW_MOST_RECENT_UNF);
+        db.execSQL("DROP VIEW IF EXISTS " + mVIEW_MOST_RECENT);
         onCreate(db);
     }
 
     public void dropTables() {
         SQLiteDatabase db = this.getWritableDatabase();
-        db.execSQL("DROP TABLE IF EXISTS " + mTABLE_NAME);
-        db.execSQL("DROP VIEW IF EXISTS " + mMOST_RECENT);
-        db.execSQL("DROP VIEW IF EXISTS " + mMOST_RECENT_UNF);
+        db.execSQL("DROP TABLE IF EXISTS " + mTABLE_MESSAGES);
+        db.execSQL("DROP VIEW IF EXISTS " + mVIEW_MOST_RECENT);
+        db.execSQL("DROP VIEW IF EXISTS " + mVIEW_MOST_RECENT_UNF);
     }
 
     public void addMessage(Message message) {
@@ -95,7 +91,7 @@ public class MessageDatabaseHelper extends SQLiteOpenHelper {
         values.put(mKEY_CONTENT, message.getContent());
         values.put(mKEY_SENT_TIME, message.getSentDate().getTime());
 
-        db.insert(mTABLE_NAME, null, values);
+        db.insert(mTABLE_MESSAGES, null, values);
     }
 
     /**
@@ -106,7 +102,7 @@ public class MessageDatabaseHelper extends SQLiteOpenHelper {
     public List<Message> getPreviousMessages(int ownerId, Contact contact, Date time) {
         SQLiteDatabase db = this.getWritableDatabase();
         String contactId = String.valueOf(contact.getId());
-        Cursor cursor = db.query(mTABLE_NAME
+        Cursor cursor = db.query(mTABLE_MESSAGES
                 , new String[] {mKEY_CONTENT, mKEY_SENDERID, mKEY_RECEIVERID, mKEY_SENT_TIME}
                 ,   "(" + mKEY_SENDERID + " = ?"
                         + " OR "
@@ -135,10 +131,10 @@ public class MessageDatabaseHelper extends SQLiteOpenHelper {
      * @return Gets most recent messages from all contacts
      */
     public List<Message> getMostRecentMessages() {
-        SQLiteDatabase db = this.getWritableDatabase();
+        SQLiteDatabase db = this.getReadableDatabase();
         List<Message> messages = new ArrayList<Message>();
         Cursor cursor = db.query(
-                  mMOST_RECENT
+                mVIEW_MOST_RECENT
                 , new String[] {mKEY_CONTENT, mKEY_SENDERID, mKEY_RECEIVERID, mKEY_SENT_TIME}
                 , null, null, null, null, mKEY_SENT_TIME + " DESC ", null
         );
@@ -156,6 +152,17 @@ public class MessageDatabaseHelper extends SQLiteOpenHelper {
             } while (cursor.moveToNext());
         }
         return messages;
+    }
+
+    public void deleteMessageHistory(Contact contact) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(mKEY_SENDERID, contact.getId());
+        values.put(mKEY_RECEIVERID, contact.getId());
+        String contactIdStr = String.valueOf(contact.getId());
+        db.delete(mTABLE_MESSAGES,
+                mKEY_SENDERID + " = ? OR " + mKEY_RECEIVERID + " = ?",
+                new String[]{contactIdStr, contactIdStr});
     }
 
     private void debugCursor(Cursor cursor, int n) {

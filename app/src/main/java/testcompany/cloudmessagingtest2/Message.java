@@ -1,6 +1,7 @@
 package testcompany.cloudmessagingtest2;
 
 import java.util.Date;
+import java.util.HashMap;
 
 public class Message {
     private final String mContent;
@@ -29,6 +30,15 @@ public class Message {
 
     public Date getSentDate() {
         return mSentTime;
+    }
+
+    public static HashMap<String, String> toHashmap(Message message) {
+        HashMap<String, String> map = new HashMap<String, String>();
+        map.put("content", message.getContent());
+        map.put("senderId", Integer.toString(message.getSenderId()));
+        map.put("receiverId", Integer.toString(message.getReceiverId()));
+        map.put("sentDate", message.getSentDate().toString());
+        return map;
     }
 
 }

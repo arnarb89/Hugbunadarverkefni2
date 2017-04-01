@@ -71,7 +71,7 @@ public class NetworkHandler {
         body.put("receiverId", Integer.toString(message.getReceiverId()));
         body.put("sentDate", message.getSentDate().toString());
 
-        sendPostRequest(SEND_CHAT_MESSAGE_URL, body, null, null, null);
+        sendPostRequest(SERVER_URL+SEND_CHAT_MESSAGE_URL, body, null, null, null);
     }
 
     public void blockContact(Contact contact) {
@@ -84,8 +84,8 @@ public class NetworkHandler {
         generalContactRequest(SERVER_URL+UNBLOCK_CONTACT_URL, contact);
     }
 
-    public void addContact(Contact contact) {
-        Log.i("testing", "addContact()");
+    public void sendFriendRequest(Contact contact) {
+        Log.i("testing", "insertContact()");
         generalContactRequest(SERVER_URL+ADD_CONTACT_URL, contact);
     }
 
@@ -152,5 +152,9 @@ public class NetworkHandler {
         if(mQueue != null) {
             mQueue.cancelAll(TAG);
         }
+    }
+
+//    TODO: finish
+    public void declineRequest(Contact contact) {
     }
 }

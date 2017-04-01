@@ -66,7 +66,7 @@ public class NewFriendsRequestsAdapter extends BaseAdapter {
         acceptFriendRequestButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ContactsManager contactManager = new ContactsManager(context);
+                ContactManager contactManager = new ContactManager(context);
                 contactManager.acceptRequest(thisData);
 
                 data.remove(pos);
@@ -77,7 +77,7 @@ public class NewFriendsRequestsAdapter extends BaseAdapter {
         declineFriendRequestButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ContactsManager contactManager = new ContactsManager(context);
+                ContactManager contactManager = new ContactManager(context);
                 contactManager.declineRequest(thisData);
 
                 data.remove(pos);

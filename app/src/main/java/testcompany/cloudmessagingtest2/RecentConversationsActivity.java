@@ -24,7 +24,7 @@ public class RecentConversationsActivity extends Activity {
 
     LoginManager loginManager;
     MessageManager messageManager;
-    ContactsManager contactsManager;
+    ContactManager contactsManager;
 
     ListView listView;
     EditText editText;
@@ -46,7 +46,7 @@ public class RecentConversationsActivity extends Activity {
 
         final int yourId = PreferencesManager.getUserId(RecentConversationsActivity.this);
 
-        contactsManager = new ContactsManager(RecentConversationsActivity.this);
+        contactsManager = new ContactManager(RecentConversationsActivity.this);
 
         messageManager = new MessageManager(RecentConversationsActivity.this);
 

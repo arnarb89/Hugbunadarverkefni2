@@ -20,7 +20,7 @@ import java.util.List;
 public class SearchContactsActivity extends Activity {
 
     LoginManager loginManager;
-    ContactsManager contactManager;
+    ContactManager contactManager;
 
     ListView listView;
     EditText editText;
@@ -39,10 +39,9 @@ public class SearchContactsActivity extends Activity {
         setContentView(R.layout.activity_search_contacts);
 
         context = this.getBaseContext();
-
-
-        contactManager = new ContactsManager(SearchContactsActivity.this);
-
+      
+        contactManager = new ContactManager(SearchContactsActivity.this);
+      
         listView = (ListView) findViewById(R.id.searchContactsResultsListView);
         editText = (EditText) findViewById(R.id.btnSearchContacts);
 

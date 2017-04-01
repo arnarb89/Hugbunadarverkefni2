@@ -1,5 +1,7 @@
 package testcompany.cloudmessagingtest2;
 
+import java.util.HashMap;
+
 public class Contact {
     private boolean isBlocked;
     private int id;

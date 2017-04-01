@@ -30,7 +30,7 @@ public class ConversationActivity extends Activity {
 
     ListView conversationListView;
 
-    ContactsManager contactManager;
+    ContactManager contactManager;
     MessageManager messageManager;
 
     final List<Message> previousMessages = new ArrayList<Message>();
@@ -45,7 +45,7 @@ public class ConversationActivity extends Activity {
         final int yourId = PreferencesManager.getUserId(ConversationActivity.this);
         idOfWhoYouAreTalkingToTemp = IdOfWhoYouAreTalkingTo;
 
-        contactManager = new ContactsManager(ConversationActivity.this);
+        contactManager = new ContactManager(ConversationActivity.this);
         messageManager = new MessageManager(ConversationActivity.this);
 
         sendMessageButton = (Button) findViewById(R.id.sendMessageButton);
