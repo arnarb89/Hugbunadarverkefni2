@@ -64,17 +64,6 @@ public class ContactDatabaseHelper extends SQLiteOpenHelper {
         onCreate(db);
     }
 
-    private void insertInto(String table, Contact contact) {
-        SQLiteDatabase db = this.getWritableDatabase();
-
-        ContentValues values = new ContentValues();
-        values.put(mKEY_USERNAME, contact.getUsername());
-        values.put(mKEY_USERID, contact.getId());
-        values.put(mKEY_BLOCKED, false);
-
-        db.insert(table, null, values);
-    }
-
     private void deleteFrom(String table, Contact contact) {
         SQLiteDatabase db = this.getWritableDatabase();
 
@@ -91,11 +80,24 @@ public class ContactDatabaseHelper extends SQLiteOpenHelper {
     }
 
     public void insertRequest(Contact contact) {
-        insertInto(mTABLE_REQUESTS, contact);
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        ContentValues values = new ContentValues();
+        values.put(mKEY_USERNAME, contact.getUsername());
+        values.put(mKEY_USERID, contact.getId());
+
+        db.insert(mTABLE_REQUESTS, null, values);
     }
 
     public void insertContact(Contact contact) {
-        insertInto(mTABLE_CONTACTS, contact);
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        ContentValues values = new ContentValues();
+        values.put(mKEY_USERNAME, contact.getUsername());
+        values.put(mKEY_USERID, contact.getId());
+        values.put(mKEY_BLOCKED, false);
+
+        db.insert(mTABLE_CONTACTS, null, values);
     }
 
     public Contact getContact(int id) {
@@ -205,7 +207,7 @@ public class ContactDatabaseHelper extends SQLiteOpenHelper {
 
         Cursor cursor = db.query(mTABLE_CONTACTS,
                 new String[]{mKEY_USERID, mKEY_USERNAME, mKEY_BLOCKED},
-                mKEY_USERNAME + " LIKE ? ",
+                mKEY_USERNAME + " LIKE '%?%' ",
                 new String[]{username},null, null, null
         );
 

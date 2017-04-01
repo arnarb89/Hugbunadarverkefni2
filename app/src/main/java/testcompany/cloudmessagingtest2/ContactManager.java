@@ -12,8 +12,6 @@ public class ContactManager {
 
     private ContactDatabaseHelper mDbHelper;
     private Context mContext;
-    //    TODO AuthHelper mAuthHelper;
-    private static final String mURL_CONTACTS = "http://something.com"; // TODO
     private NetworkHandler mNetworkHandler;
 
     public ContactManager(Context context) {
@@ -44,17 +42,12 @@ public class ContactManager {
     }
 
     public void sendFriendRequest(Contact contact) {
-        mDbHelper.insertContact(contact);
+//        mDbHelper.insertContact(contact);
         mNetworkHandler.sendFriendRequest(contact);
     }
 
     public void storeRequest(Contact contact) {
         mDbHelper.insertRequest(contact);
-    }
-
-//    TODO: finish
-    public void sendRequest() {
-
     }
 
     public void acceptRequest(Contact contact) {

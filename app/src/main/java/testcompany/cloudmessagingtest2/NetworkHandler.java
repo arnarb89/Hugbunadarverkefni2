@@ -71,7 +71,7 @@ public class NetworkHandler {
         body.put("receiverId", Integer.toString(message.getReceiverId()));
         body.put("sentDate", message.getSentDate().toString());
 
-        sendPostRequest(SERVER_URL+SEND_CHAT_MESSAGE_URL, body, null, null, null);
+        sendPostRequest(SEND_CHAT_MESSAGE_URL, body, null, null, null);
     }
 
     public void blockContact(Contact contact) {
