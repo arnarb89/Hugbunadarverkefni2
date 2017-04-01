@@ -93,7 +93,7 @@ public class ConversationActivity extends Activity {
                 Date sentTime = new Date();
                 Message message = new Message(content, senderId, receiverId, sentTime);
 
-                messageManager.addMessage(message);
+                messageManager.sendMessage(message);
 
                 previousMessages.add(0, message);
                 conversationAdapter.notifyDataSetChanged();

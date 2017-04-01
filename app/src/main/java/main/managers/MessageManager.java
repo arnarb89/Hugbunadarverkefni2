@@ -11,14 +11,21 @@ import main.model.Message;
 public class MessageManager {
 
     private MessageDatabaseHelper mDbHelper;
+    private NetworkHandler networkHandler;
 
     public MessageManager(Context context) {
+        NetworkHandler networkHandler = new NetworkHandler(context);
         mDbHelper = new MessageDatabaseHelper(context);
     }
 
 
     public void addMessage(Message message) {
         mDbHelper.addMessage(message);
+    }
+
+    public void sendMessage(Message message) {
+        addMessage(message);
+        networkHandler.sendMessage(message);
     }
 
     public List<Message> getPreviousMessages(int ownerId, Contact contact, Date time) {
