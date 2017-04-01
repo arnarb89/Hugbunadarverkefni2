@@ -80,7 +80,7 @@ public class NetworkHandler {
 
     public void blockContact(Contact contact) {
         Log.i("testing", "blockContact()");
-        generalContactRequest(SERVER_URL+BLOCK_CONTACT_URL, contact);
+        generalContactRequest(BLOCK_CONTACT_URL, contact);
     }
 
     public void unblockContact(Contact contact) {
@@ -152,7 +152,7 @@ public class NetworkHandler {
             };
         }
 
-        JsonObjectRequest req = new JsonObjectRequest(SERVER_URL+url, new JSONObject(requestBody), responseListener, errorListener);
+        JsonObjectRequest req = new JsonObjectRequest(url, new JSONObject(requestBody), responseListener, errorListener);
 
         if(TAG != null) req.setTag(TAG);
 
