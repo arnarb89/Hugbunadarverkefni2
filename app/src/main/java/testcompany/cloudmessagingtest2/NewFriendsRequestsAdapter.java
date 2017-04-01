@@ -67,7 +67,7 @@ public class NewFriendsRequestsAdapter extends BaseAdapter {
             @Override
             public void onClick(View v) {
                 ContactManager contactManager = new ContactManager(context);
-                contactManager.acceptRequest(thisData);
+                contactManager.acceptFriendRequest(thisData);
 
                 data.remove(pos);
                 notifyDataSetChanged();
@@ -78,7 +78,7 @@ public class NewFriendsRequestsAdapter extends BaseAdapter {
             @Override
             public void onClick(View v) {
                 ContactManager contactManager = new ContactManager(context);
-                contactManager.declineRequest(thisData);
+                contactManager.declineFriendRequest(thisData);
 
                 data.remove(pos);
                 notifyDataSetChanged();

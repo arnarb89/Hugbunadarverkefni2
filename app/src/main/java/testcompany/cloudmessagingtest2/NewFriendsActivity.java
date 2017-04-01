@@ -63,7 +63,7 @@ public class NewFriendsActivity extends Activity {
         addContactButton.setTextColor(getResources().getColor(R.color.darkred));
 
         // Populate Recent Conversations list with items
-        NewFriendsRequestsAdapter newFriendsRequestsAdapter = new NewFriendsRequestsAdapter(contactsManager.getRequests(), this.getBaseContext());
+        NewFriendsRequestsAdapter newFriendsRequestsAdapter = new NewFriendsRequestsAdapter(contactsManager.getReceivedFriendRequests(), this.getBaseContext());
         listView.setAdapter(newFriendsRequestsAdapter);
 
 
