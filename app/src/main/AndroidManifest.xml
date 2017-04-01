@@ -16,32 +16,32 @@
 
         android:debuggable="true"
         <activity
-            android:name=".RecentConversationsActivity"
+            android:name="main.activities.RecentConversationsActivity"
             android:theme="@style/FireTextNoTitleBar" />
 
-        <service android:name=".MyFirebaseInstanceIDService">
+        <service android:name="main.services.MyFirebaseInstanceIDService">
             <intent-filter>
                 <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
             </intent-filter>
         </service>
-        <service android:name=".MyFirebaseMessagingService">
+        <service android:name="main.services.MyFirebaseMessagingService">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
         </service>
 
-        <activity android:name=".NewFriendsActivity" />
-        <activity android:name=".SignInActivity">
+        <activity android:name="main.activities.NewFriendsActivity" />
+        <activity android:name="main.activities.SignInActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".ContactsActivity" />
-        <activity android:name=".BlockedContactsActivity" />
-        <activity android:name=".SearchContactsActivity" />
-        <activity android:name=".ConversationActivity"></activity>
+        <activity android:name="main.activities.ContactsActivity" />
+        <activity android:name="main.activities.BlockedContactsActivity" />
+        <activity android:name="main.activities.SearchContactsActivity" />
+        <activity android:name="main.activities.ConversationActivity"></activity>
     </application>
 
 </manifest>

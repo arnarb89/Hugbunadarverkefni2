@@ -1,4 +1,4 @@
-package testcompany.cloudmessagingtest2;
+package main.managers;
 
 import android.content.Context;
 
@@ -8,12 +8,12 @@ import org.json.JSONObject;
 
 import java.util.List;
 
+import main.model.Contact;
+
 public class ContactManager {
 
     private ContactDatabaseHelper mDbHelper;
     private Context mContext;
-    //    TODO AuthHelper mAuthHelper;
-    private static final String mURL_CONTACTS = "http://something.com"; // TODO
     private NetworkHandler mNetworkHandler;
 
     public ContactManager(Context context) {
@@ -37,33 +37,28 @@ public class ContactManager {
     {
         mNetworkHandler.searchForContact(username, responseListener, errorListener);
     }
-    public List<Contact> getRequests() { return mDbHelper.getRequests(); }
+    public List<Contact> getReceivedFriendRequests() { return mDbHelper.getRequests(); }
 
     public Contact getContactById(int userid) {
         return mDbHelper.getContact(userid);
     }
 
     public void sendFriendRequest(Contact contact) {
-        mDbHelper.insertContact(contact);
+//        mDbHelper.insertContact(contact);
         mNetworkHandler.sendFriendRequest(contact);
     }
 
-    public void storeRequest(Contact contact) {
+    public void storeFriendRequest(Contact contact) {
         mDbHelper.insertRequest(contact);
     }
 
-//    TODO: finish
-    public void sendRequest() {
-
-    }
-
-    public void acceptRequest(Contact contact) {
+    public void acceptFriendRequest(Contact contact) {
         mDbHelper.deleteRequest(contact);
         mDbHelper.insertContact(contact);
     }
 
-    public void declineRequest(Contact contact) {
-        mNetworkHandler.declineRequest(contact);
+    public void declineFriendRequest(Contact contact) {
+        mNetworkHandler.declineFriendRequest(contact);
         mDbHelper.deleteRequest(contact);
     }
 

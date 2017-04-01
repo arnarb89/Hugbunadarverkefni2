@@ -1,9 +1,12 @@
-package testcompany.cloudmessagingtest2;
+package main.managers;
 
 import android.content.Context;
 
 import java.util.Date;
 import java.util.List;
+
+import main.model.Contact;
+import main.model.Message;
 
 public class MessageManager {
 

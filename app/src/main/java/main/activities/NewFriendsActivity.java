@@ -1,4 +1,4 @@
-package testcompany.cloudmessagingtest2;
+package main.activities;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -20,6 +20,12 @@ import org.json.JSONObject;
 
 import java.util.Timer;
 import java.util.TimerTask;
+
+import main.adapters.NewFriendsRequestsAdapter;
+import main.managers.ContactManager;
+import main.managers.LoginManager;
+import main.model.Contact;
+import testcompany.cloudmessagingtest2.R;
 
 public class NewFriendsActivity extends Activity {
 
@@ -63,7 +69,7 @@ public class NewFriendsActivity extends Activity {
         addContactButton.setTextColor(getResources().getColor(R.color.darkred));
 
         // Populate Recent Conversations list with items
-        NewFriendsRequestsAdapter newFriendsRequestsAdapter = new NewFriendsRequestsAdapter(contactsManager.getRequests(), this.getBaseContext());
+        NewFriendsRequestsAdapter newFriendsRequestsAdapter = new NewFriendsRequestsAdapter(contactsManager.getReceivedFriendRequests(), this.getBaseContext());
         listView.setAdapter(newFriendsRequestsAdapter);
 
 

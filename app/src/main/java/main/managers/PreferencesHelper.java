@@ -1,4 +1,4 @@
-package testcompany.cloudmessagingtest2;
+package main.managers;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
@@ -15,7 +15,7 @@ import com.google.firebase.iid.FirebaseInstanceId;
  * Created by Notandi on 3/19/2017.
  */
 
-public class PreferencesManager {
+public class PreferencesHelper {
     private static final String firebaseUserIdToken_Key = "firebaseUserIdToken";
     private static final String firebaseUserIdToken_PreferencesName = "tokens";
     private static final String userId_Key = "userId";
