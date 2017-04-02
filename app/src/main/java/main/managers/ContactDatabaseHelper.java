@@ -137,11 +137,12 @@ public class ContactDatabaseHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
         List<Contact> contacts = new ArrayList<Contact>();
 
+        String selStr = String.valueOf(blocked ? 0 : 1);
         Cursor cursor = db.query(
                 mTABLE_CONTACTS,
                 new String[] {mKEY_USERID, mKEY_USERNAME, mKEY_BLOCKED},
-                mKEY_BLOCKED+ " = ?",
-                new String[] {String.valueOf(blocked)},
+                mKEY_BLOCKED + " = ?",
+                new String[] {selStr},
                 null, null, null, null
         );
 
@@ -156,7 +157,6 @@ public class ContactDatabaseHelper extends SQLiteOpenHelper {
             } while (cursor.moveToNext());
         }
 
-        cursor.close();
         return contacts;
     }
 
