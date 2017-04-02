@@ -10,6 +10,7 @@ package main.adapters;
         import android.widget.BaseAdapter;
         import android.widget.TextView;
 
+        import java.text.SimpleDateFormat;
         import java.util.List;
 
         import main.model.Message;
@@ -65,7 +66,9 @@ public class ConversationAdapter extends BaseAdapter {
 
 
         TextView timeView=(TextView)convertView.findViewById(R.id.timeTextView);
-        timeView.setText(thisData.getSentDate().toString());
+        SimpleDateFormat spf = new SimpleDateFormat("hh:mm:ss EEE, dd MMM ''yy");
+        String newDateString = spf.format(thisData.getSentDate());
+        timeView.setText(newDateString);
 
         TextView messageView=(TextView)convertView.findViewById(R.id.messageTextView);
         messageView.setText(thisData.getContent());
