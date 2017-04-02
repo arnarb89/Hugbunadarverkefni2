@@ -73,7 +73,7 @@ public class RecentConversationsAdapter extends BaseAdapter {
             messageView.setText(contactManager.getContactById(thisData.getSenderId()).getUsername()+" says: "+thisData.getContent());
         }
 
-        SimpleDateFormat spf = new SimpleDateFormat("EEE hh:mm, dd MMM ''yy");
+        SimpleDateFormat spf = new SimpleDateFormat("EEE HH:mm, dd MMM ''yy");
         String newDateString = spf.format(thisData.getSentDate());
 
         timeView.setText(newDateString);
