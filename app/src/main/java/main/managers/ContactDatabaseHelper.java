@@ -159,7 +159,7 @@ public class ContactDatabaseHelper extends SQLiteOpenHelper {
         return contacts;
     }
 
-    public List<Contact> getRequests() {
+    public List<Contact> getFriendRequests() {
         SQLiteDatabase db = this.getWritableDatabase();
         String selectQuery = "SELECT * FROM " + mTABLE_REQUESTS;
         List<Contact> contacts = new ArrayList<Contact>();
@@ -181,7 +181,7 @@ public class ContactDatabaseHelper extends SQLiteOpenHelper {
         return contacts;
     }
 
-    public void deleteRequest(Contact contact) {
+    public void deleteFriendRequest(Contact contact) {
         deleteFrom(mTABLE_REQUESTS, contact);
     }
 

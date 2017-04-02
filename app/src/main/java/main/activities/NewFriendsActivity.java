@@ -121,6 +121,7 @@ public class NewFriendsActivity extends Activity {
                                                 }
                                             });
                                         } catch (JSONException e) {
+                                            Log.i("testing", "****** Response from globalSearchForUsername, JSONexception");
                                             e.printStackTrace();
                                             Toast.makeText(NewFriendsActivity.this, "No user by that name.", Toast.LENGTH_SHORT).show();
                                         }
@@ -129,7 +130,7 @@ public class NewFriendsActivity extends Activity {
                                 Response.ErrorListener errorListener = new Response.ErrorListener() {
                                     @Override
                                     public void onErrorResponse(VolleyError error) {
-                                        Log.i("testing", "****** Response from globalSearchForUsername");
+                                        Log.i("testing", "****** Error Response from globalSearchForUsername");
                                         Toast.makeText(NewFriendsActivity.this, "No user by that name.", Toast.LENGTH_SHORT).show();
                                         addContactButton.setTextColor(getResources().getColor(R.color.darkred));
                                         addContactButton.setOnClickListener(new View.OnClickListener() {

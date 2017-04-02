@@ -5,18 +5,12 @@ import android.database.sqlite.SQLiteDatabase;
 import android.support.test.InstrumentationRegistry;
 import android.support.test.runner.AndroidJUnit4;
 
-import junit.framework.Assert;
-
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import java.util.List;
-
 import main.managers.ContactDatabaseHelper;
 import main.model.Contact;
-
-import static org.junit.Assert.assertEquals;
 
 @RunWith(AndroidJUnit4.class)
 public class ContactManagerInstrumentedTest {
@@ -42,7 +36,7 @@ public class ContactManagerInstrumentedTest {
 /*//        Add friend request
         dbHelper.insertRequest(haukur);
         Contact contact;
-        List<Contact> friendRequests = dbHelper.getRequests();
+        List<Contact> friendRequests = dbHelper.getFriendRequests();
         contact = friendRequests.get(0);
 
         Assert.assertTrue(areEqual(haukur, contact));

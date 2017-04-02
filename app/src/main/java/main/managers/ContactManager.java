@@ -37,7 +37,7 @@ public class ContactManager {
     {
         mNetworkHandler.searchForContact(username, responseListener, errorListener);
     }
-    public List<Contact> getReceivedFriendRequests() { return mDbHelper.getRequests(); }
+    public List<Contact> getReceivedFriendRequests() { return mDbHelper.getFriendRequests(); }
 
     public Contact getContactById(int userid) {
         return mDbHelper.getContact(userid);
@@ -52,14 +52,18 @@ public class ContactManager {
         mDbHelper.insertRequest(contact);
     }
 
+    public void storeContact(Contact contact) {
+        mDbHelper.insertContact(contact);
+    }
+
     public void acceptFriendRequest(Contact contact) {
-        mDbHelper.deleteRequest(contact);
+        mDbHelper.deleteFriendRequest(contact);
         mDbHelper.insertContact(contact);
     }
 
     public void declineFriendRequest(Contact contact) {
         mNetworkHandler.declineFriendRequest(contact);
-        mDbHelper.deleteRequest(contact);
+        mDbHelper.deleteFriendRequest(contact);
     }
 
     public void deleteContact(Contact contact) {

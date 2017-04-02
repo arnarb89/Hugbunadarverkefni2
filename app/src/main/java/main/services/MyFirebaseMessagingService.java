@@ -32,7 +32,9 @@ import com.google.firebase.messaging.RemoteMessage;
 import java.util.Date;
 
 import main.activities.RecentConversationsActivity;
+import main.managers.ContactManager;
 import main.managers.MessageManager;
+import main.model.Contact;
 import main.model.Message;
 import testcompany.cloudmessagingtest2.R;
 
@@ -83,7 +85,6 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                 case chatMessageType: {
                     String content = remoteMessage.getData().get("content");
                     Date sentTime = new Date(Long.parseLong(remoteMessage.getData().get("sentTime")));
-
                     Message message = new Message(content, senderId, receiverId, sentTime);
 
                     MessageManager messageManager = new MessageManager(getBaseContext());
@@ -98,13 +99,22 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
                     Intent intent2 = new Intent("update_recent_conversations");
                     LocalBroadcastManager.getInstance(getBaseContext()).sendBroadcast(intent2);
+                    break;
                 }
                 case friendRequestType: {
                     String senderUsername = remoteMessage.getData().get("senderUsername");
                     // TODO: send the friend request to the correct place in the database and probably notify the user somehow
+                    ContactManager contactManager = new ContactManager(getBaseContext());
+                    Contact contact = new Contact(senderId, senderUsername, false);
+                    contactManager.storeFriendRequest(contact);
+                    break;
                 }
                 case friendResponseType: {
-                    // TODO: add the contact to your contact list in the database
+                    ContactManager contactManager = new ContactManager(getBaseContext());
+                    String username = remoteMessage.getData().get("accepterUsername");
+                    Contact contact = new Contact(senderId, username, false);
+                    contactManager.storeContact(contact);
+                    break;
                 }
                 default: {
                     throw new Error("Received a message not fitting any of the message type categories.");
