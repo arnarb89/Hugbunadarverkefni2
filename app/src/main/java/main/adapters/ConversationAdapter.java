@@ -66,7 +66,7 @@ public class ConversationAdapter extends BaseAdapter {
 
 
         TextView timeView=(TextView)convertView.findViewById(R.id.timeTextView);
-        SimpleDateFormat spf = new SimpleDateFormat("hh:mm:ss EEE, dd MMM ''yy");
+        SimpleDateFormat spf = new SimpleDateFormat("EEE hh:mm, dd MMM ''yy");
         String newDateString = spf.format(thisData.getSentDate());
         timeView.setText(newDateString);
 
