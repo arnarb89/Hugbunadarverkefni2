@@ -113,6 +113,7 @@ public class ContactDatabaseHelper extends SQLiteOpenHelper {
         );
         Contact contact = null;
         if(cursor != null && cursor.getCount() > 0) {
+            cursor.moveToFirst();
             contact = new Contact(
                     Integer.parseInt(cursor.getString(0)),
                     cursor.getString(1),
@@ -203,14 +204,16 @@ public class ContactDatabaseHelper extends SQLiteOpenHelper {
 
     }
 
-    public List<Contact> searchContacts(String username) {
+    public List<Contact> searchContacts(String searchStr) {
         SQLiteDatabase db = this.getWritableDatabase();
         List<Contact> contacts = new ArrayList<Contact>();
-
+        String query = "SELECT " + mKEY_USERID + "," + mKEY_USERNAME + "," + mKEY_BLOCKED +
+                " FROM " + mTABLE_CONTACTS
+                + " WHERE LOWER(" + mKEY_USERNAME + ") LIKE LOWER(?)";
         Cursor cursor = db.query(mTABLE_CONTACTS,
                 new String[]{mKEY_USERID, mKEY_USERNAME, mKEY_BLOCKED},
-                mKEY_USERNAME + " LIKE '%?%' ",
-                new String[]{username},null, null, null
+                " LOWER(" + mKEY_USERNAME + ") LIKE ? ",
+                new String[]{"%"+ searchStr.toLowerCase()+"%"},null, null, null
         );
 
         if(cursor.moveToFirst()) {
