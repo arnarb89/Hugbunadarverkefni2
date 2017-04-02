@@ -5,6 +5,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -97,7 +98,7 @@ public class ContactDatabaseHelper extends SQLiteOpenHelper {
         ContentValues values = new ContentValues();
         values.put(mKEY_USERNAME, contact.getUsername());
         values.put(mKEY_USERID, contact.getId());
-        values.put(mKEY_BLOCKED, false);
+        values.put(mKEY_BLOCKED, contact.isBlocked() ? 1 : 0);
 
         db.insert(mTABLE_CONTACTS, null, values);
     }
@@ -137,7 +138,7 @@ public class ContactDatabaseHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
         List<Contact> contacts = new ArrayList<Contact>();
 
-        String selStr = String.valueOf(blocked ? 0 : 1);
+        String selStr = String.valueOf(blocked ? 1 : 0);
         Cursor cursor = db.query(
                 mTABLE_CONTACTS,
                 new String[] {mKEY_USERID, mKEY_USERNAME, mKEY_BLOCKED},
@@ -157,6 +158,7 @@ public class ContactDatabaseHelper extends SQLiteOpenHelper {
             } while (cursor.moveToNext());
         }
 
+        Log.i("cloudmessagingtest","contactdatabasehelper.getNonBlockedContacts: found " + contacts.size() + " contacts");
         return contacts;
     }
 
@@ -177,7 +179,6 @@ public class ContactDatabaseHelper extends SQLiteOpenHelper {
                 contacts.add(contact);
             } while (cursor.moveToNext());
         }
-
         cursor.close();
         return contacts;
     }
