@@ -78,8 +78,8 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         if (remoteMessage.getData().size() > 0) {
             Log.i("testing", "MyFirebaseMessagingService.onMessageReceived(), remoteMessage.getData(): " + remoteMessage.getData());
 
-            int senderId = Integer.getInteger(remoteMessage.getData().get("senderId"));
-            int receiverId = Integer.getInteger(remoteMessage.getData().get("receiverId"));
+            int senderId = Integer.parseInt(remoteMessage.getData().get("senderId"));
+            int receiverId = Integer.parseInt(remoteMessage.getData().get("receiverId"));
 
             switch(remoteMessage.getData().get("messageType")) {
                 case chatMessageType: {

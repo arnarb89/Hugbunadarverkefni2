@@ -171,7 +171,7 @@ public class ContactDatabaseHelper extends SQLiteOpenHelper {
                 Contact contact = new Contact(
                         Integer.parseInt(cursor.getString(0)),
                         cursor.getString(1),
-                        parseBoolean(cursor.getString(2))
+                        false
                 );
                 contacts.add(contact);
             } while (cursor.moveToNext());

@@ -58,6 +58,7 @@ public class ContactManager {
 
     public void acceptFriendRequest(Contact contact) {
         mDbHelper.deleteFriendRequest(contact);
+        mNetworkHandler.acceptFriendRequest(contact);
         mDbHelper.insertContact(contact);
     }
 
