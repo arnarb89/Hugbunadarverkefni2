@@ -12,6 +12,7 @@ import com.android.volley.toolbox.Volley;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.Date;
 import java.util.HashMap;
 
 import main.model.Contact;
@@ -73,7 +74,9 @@ public class NetworkHandler {
         body.put("content", message.getContent());
         body.put("senderId", Integer.toString(message.getSenderId()));
         body.put("receiverId", Integer.toString(message.getReceiverId()));
-        body.put("sentDate", message.getSentDate().toString());
+        body.put("sentDate", String.valueOf(message.getSentDate().getTime()));
+        Log.i("testing", "sent time AS DATE after parsing in networkHandler: " + message.getSentDate());
+        Log.i("testing", "sent time AS STRING after parsing in networkHandler: " + message.getSentDate().toString());
 
         sendPostRequest(SEND_CHAT_MESSAGE_URL, body, null, null, null);
     }

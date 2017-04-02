@@ -11,10 +11,10 @@ import main.model.Message;
 public class MessageManager {
 
     private MessageDatabaseHelper mDbHelper;
-    private NetworkHandler networkHandler;
+    private NetworkHandler mNetworkHandler;
 
     public MessageManager(Context context) {
-        NetworkHandler networkHandler = new NetworkHandler(context);
+        mNetworkHandler = new NetworkHandler(context);
         mDbHelper = new MessageDatabaseHelper(context);
     }
 
@@ -25,7 +25,7 @@ public class MessageManager {
 
     public void sendMessage(Message message) {
         addMessage(message);
-        networkHandler.sendMessage(message);
+        mNetworkHandler.sendMessage(message);
     }
 
     public List<Message> getPreviousMessages(int ownerId, Contact contact, Date time) {
