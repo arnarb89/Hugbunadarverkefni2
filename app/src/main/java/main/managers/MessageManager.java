@@ -14,7 +14,7 @@ public class MessageManager {
     private NetworkHandler mNetworkHandler;
 
     public MessageManager(Context context) {
-        NetworkHandler mNetworkHandler = new NetworkHandler(context);
+        mNetworkHandler = new NetworkHandler(context);
         mDbHelper = new MessageDatabaseHelper(context);
     }
 

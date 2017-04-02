@@ -85,6 +85,8 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                 case chatMessageType: {
                     String content = remoteMessage.getData().get("content");
                     Date sentTime = new Date(Long.parseLong(remoteMessage.getData().get("sentTime")));
+                    Log.i("testing", "sent time AS LONG after parsing in messagingService: " + Long.parseLong(remoteMessage.getData().get("sentTime")));
+                    Log.i("testing", "sent time AS DATE after parsing in messagingService: " + new Date(Long.parseLong(remoteMessage.getData().get("sentTime"))));
                     Message message = new Message(content, senderId, receiverId, sentTime);
 
                     MessageManager messageManager = new MessageManager(getBaseContext());
