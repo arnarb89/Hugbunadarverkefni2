@@ -75,9 +75,6 @@ public class NetworkHandler {
         body.put("senderId", Integer.toString(message.getSenderId()));
         body.put("receiverId", Integer.toString(message.getReceiverId()));
         body.put("sentTime", String.valueOf(message.getSentDate().getTime()));
-        Log.i("testing", "sent time AS DATE after parsing in networkHandler: " + message.getSentDate());
-        Log.i("testing", "sent time AS LONG after parsing in networkHandler: " + message.getSentDate().getTime());
-        Log.i("testing", "sent time AS STRING after parsing in networkHandler: " + String.valueOf(message.getSentDate().getTime()));
 
         sendPostRequest(SEND_CHAT_MESSAGE_URL, body, null, null, null);
     }
