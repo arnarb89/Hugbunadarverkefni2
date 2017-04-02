@@ -38,8 +38,17 @@ public class Message {
         map.put("content", message.getContent());
         map.put("senderId", Integer.toString(message.getSenderId()));
         map.put("receiverId", Integer.toString(message.getReceiverId()));
-        map.put("sentDate", message.getSentDate().toString());
+        map.put("sentDate", String.valueOf(message.getSentDate().getTime()));
         return map;
     }
+
+    public Message(HashMap<String, String> map) {
+        mContent = map.get("content");
+        mSenderId = Integer.parseInt(map.get("senderId"));
+        mReceiverId = Integer.parseInt(map.get("receiverId"));
+        mSentTime = new Date(Long.parseLong(map.get("sentTime")));
+    }
+
+
 
 }
