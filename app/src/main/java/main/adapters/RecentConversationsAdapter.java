@@ -7,11 +7,12 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
+import java.text.SimpleDateFormat;
 import java.util.List;
 
 import main.managers.ContactManager;
-import main.model.Message;
 import main.managers.PreferencesHelper;
+import main.model.Message;
 import testcompany.cloudmessagingtest2.R;
 
 /**
@@ -72,8 +73,10 @@ public class RecentConversationsAdapter extends BaseAdapter {
             messageView.setText(contactManager.getContactById(thisData.getSenderId()).getUsername()+" says: "+thisData.getContent());
         }
 
+        SimpleDateFormat spf = new SimpleDateFormat("EEE HH:mm, dd MMM ''yy");
+        String newDateString = spf.format(thisData.getSentDate());
 
-        timeView.setText(thisData.getSentDate().toString());
+        timeView.setText(newDateString);
 
 
 
