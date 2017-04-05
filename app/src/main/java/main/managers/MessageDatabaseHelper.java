@@ -111,7 +111,7 @@ public class MessageDatabaseHelper extends SQLiteOpenHelper {
                         + " OR "
                         + mKEY_RECEIVERID + " = ? )"
                     + " AND "
-                        + mKEY_SENT_TIME + " <= ?"
+                        + mKEY_SENT_TIME + " < ?"
                 , new String[] {contactId, contactId, String.valueOf(time.getTime())}
                 , null, null, mKEY_SENT_TIME + " DESC", "20");
         List<Message> messages = new ArrayList<Message>();
