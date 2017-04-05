@@ -14,6 +14,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.iid.FirebaseInstanceId;
 
 import java.util.Arrays;
 
@@ -56,17 +57,15 @@ public class LoginManager {
 
     // https://github.com/firebase/FirebaseUI-Android/blob/master/auth/README.md#using-firebaseui-for-authentication
     public void signIn() {
-//        mAuth = FirebaseAuth.getInstance();
-
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         if (user != null) {
-            // send user to recentConversation activity
+            // User is signed in
 
             Log.i("testing", "LoginManager.signIn(), I'm already logged in");
             mActivity.startActivity(new Intent(mActivity, RecentConversationsActivity.class));
-            // User is signed in
-            Log.d(TAG, "onAuthStateChanged:signed_in:" + user.getUid());
         } else {
+            // User is signed out
+
             mActivity.startActivityForResult(
                     AuthUI.getInstance()
                             .createSignInIntentBuilder()
@@ -75,9 +74,6 @@ public class LoginManager {
                             .build(),
                     RC_SIGN_IN
             );
-
-            // User is signed out
-            Log.d(TAG, "onAuthStateChanged:signed_out");
         }
     }
 
@@ -93,12 +89,18 @@ public class LoginManager {
         Log.i("testing", "LoginManager.handleSignInResult(), Requestcode: "+requestCode+" ResultCode: "+resultCode);
         if (requestCode == RC_SIGN_IN) {
             IdpResponse response = IdpResponse.fromResultIntent(data);
-
             Log.i("testing", "LoginManager.handleSignInResult(), identity provider token: " + response.getIdpToken());
 
             // Successfully signed in
             if (resultCode == ResultCodes.OK) {
-                PreferencesHelper.setFirebaseUserIdToken(mActivity);
+//                PreferencesHelper.setFirebaseUserIdToken(mActivity);
+
+                // register the new firebaseInstanceIdToken if it has expired
+                if(PreferencesHelper.isExpired_FirebaseInstanceIdToken(mActivity)) {
+                    NetworkHandler networkHandler = new NetworkHandler(mActivity);
+                    networkHandler.registerUser(FirebaseInstanceId.getInstance().getToken());
+                }
+
                 mActivity.startActivity(new Intent(mActivity, RecentConversationsActivity.class)
                         .putExtra("google_token", response.getIdpToken()));
                 mActivity.finish();

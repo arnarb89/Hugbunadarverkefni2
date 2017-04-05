@@ -1,17 +1,22 @@
 package main.activities;
 
 import android.content.Intent;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+
 import main.managers.LoginManager;
+import main.managers.NetworkHandler;
+import main.managers.PreferencesHelper;
 
 public class SignInActivity extends AppCompatActivity {
     private static final String TAG = "SignInActivity";
 
     private LoginManager loginManager;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

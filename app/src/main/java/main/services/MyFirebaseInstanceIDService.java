@@ -2,6 +2,8 @@ package main.services;
 
 import android.util.Log;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.FirebaseInstanceIdService;
 
@@ -45,14 +47,19 @@ public class MyFirebaseInstanceIDService extends FirebaseInstanceIdService {
      * @param token The new token.
      */
     private void sendRegistrationToServer(String token) {
-        // TODO: Implement this method to send token to your app server.
-        String firebaseIdToken;
-        if(PreferencesHelper.getFirebaseUserIdToken(this) != null) {
-            // TODO: send the deviceIdToken to the server along with the firebaseIdToken or some other id (a userId we might have generated) to associate this device to this user
-            NetworkHandler networkHandler = new NetworkHandler(this);
+        if(PreferencesHelper.isExpired_FirebaseUserIdToken(this) && FirebaseAuth.getInstance().getCurrentUser() == null) {
+            PreferencesHelper.setExpiredState_FirebaseInstanceIdToken(this, true);
+        } else {
+            NetworkHandler networkHandler = new NetworkHandler((this));
             networkHandler.registerUser(token);
+        }
 
-        } // otherwise do nothing, since we have no way to associate this instanceIdToken with a user
+
+//        if(PreferencesHelper.getFirebaseUserIdToken(this) != null) {
+//            NetworkHandler networkHandler = new NetworkHandler(this);
+//            networkHandler.registerUser(token);
+//
+//        } // otherwise do nothing, since we have no way to associate this instanceIdToken with a user
 
     }
 }

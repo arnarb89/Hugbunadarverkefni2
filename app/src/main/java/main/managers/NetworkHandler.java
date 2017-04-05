@@ -1,6 +1,7 @@
 package main.managers;
 
 import android.content.Context;
+import android.support.annotation.NonNull;
 import android.util.Log;
 
 import com.android.volley.RequestQueue;
@@ -8,6 +9,12 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.GetTokenResult;
+import com.google.firebase.iid.FirebaseInstanceId;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -35,12 +42,10 @@ public class NetworkHandler {
     private static final String DECLINE_FRIEND_REQUEST_URL =  SERVER_URL + "/contact/declineFriendRequest";
 
     private RequestQueue mQueue;
-    private String mFireBaseUserIdToken;
     private Context mContext;
 
     public NetworkHandler(Context context) {
         mQueue = Volley.newRequestQueue(context);
-        mFireBaseUserIdToken = PreferencesHelper.getFirebaseUserIdToken(context);
         mContext = context;
     }
 
@@ -48,7 +53,6 @@ public class NetworkHandler {
         Log.i("testing", "registerUser()");
         HashMap<String, String> body = new HashMap<String, String>();
 
-        body.put("firebaseUserIdToken", mFireBaseUserIdToken);
         body.put("firebaseInstanceIdToken", firebaseInstanceIdToken);
 
         sendPostRequest(REGISTRATION_URL, body,
@@ -62,6 +66,7 @@ public class NetworkHandler {
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
+                        PreferencesHelper.setExpiredState_FirebaseInstanceIdToken(mContext, false);
                     }
                 }, null, null);
     }
@@ -70,7 +75,6 @@ public class NetworkHandler {
         Log.i("testing", "sendMessage()");
         HashMap<String, String> body = new HashMap<String, String>();
 
-        body.put("firebaseUserIdToken", mFireBaseUserIdToken);
         body.put("content", message.getContent());
         body.put("senderId", Integer.toString(message.getSenderId()));
         body.put("receiverId", Integer.toString(message.getReceiverId()));
@@ -114,7 +118,6 @@ public class NetworkHandler {
         HashMap<String, String> body = new HashMap<String, String>();
         String userId = Integer.toString(PreferencesHelper.getUserId(mContext));
 
-        body.put("firebaseUserIdToken", mFireBaseUserIdToken);
         body.put("userId", userId);
         body.put("subjectId", Integer.toString(contact.getId()));
 
@@ -128,12 +131,11 @@ public class NetworkHandler {
 
         HashMap<String, String> body = new HashMap<String, String>();
 
-        body.put("firebaseUserIdToken", mFireBaseUserIdToken);
         body.put("searchString", searchString);
         sendPostRequest(SEARCH_FOR_CONTACT_URL, body, responseListener, errorListener, requestTag);
     }
 
-    private void sendPostRequest(String url, HashMap<String, String> requestBody, Response.Listener<JSONObject> responseListener, Response.ErrorListener errorListener, String TAG) {
+    private void sendPostRequest(final String url, HashMap<String, String> requestBody, Response.Listener<JSONObject> responseListener, Response.ErrorListener errorListener, final String TAG) {
         Log.i("testing", "sendPostRequest()");
 
         if(errorListener == null) {
@@ -153,12 +155,48 @@ public class NetworkHandler {
             };
         }
 
-        JsonObjectRequest req = new JsonObjectRequest(url, new JSONObject(requestBody), responseListener, errorListener);
-
-        if(TAG != null) req.setTag(TAG);
-
+        // check if the firebaseUserIdToken has expired and
         // add the request object to the queue to be executed
-        mQueue.add(req);
+        if(PreferencesHelper.isExpired_FirebaseUserIdToken(mContext)) {
+            final Response.Listener<JSONObject> responseListenerToUseInsideTask = responseListener;
+            final Response.ErrorListener errorListenerToUseInsideTask = errorListener;
+            final HashMap<String, String> requestBodyToUseInsideTask = requestBody;
+            FirebaseAuth.getInstance().getCurrentUser().getToken(true)
+                    .addOnCompleteListener(new OnCompleteListener<GetTokenResult>() {
+                        public void onComplete(@NonNull Task<GetTokenResult> task) {
+                            if (task.isSuccessful()) {
+                                // get the new firebaseUserIdToken
+                                String firebaseUserIdToken = task.getResult().getToken();
+                                Log.i("testing", "NetworkHandler.sendPostRequest(), userIdToken: " + firebaseUserIdToken);
+                                // reset the expiry time of the firebaseUserIdToken
+                                PreferencesHelper.setLastUpdatedTime_FirebaseUserIdToken(mContext, System.currentTimeMillis());
+                                // and set the firebaseUserIdToken itself
+                                PreferencesHelper.setFirebaseUserIdToken(mContext, firebaseUserIdToken);
+
+
+                                JSONObject requestBody = new JSONObject(requestBodyToUseInsideTask);
+                                try {
+                                    requestBody.put("firebaseUserIdToken", firebaseUserIdToken);
+                                    JsonObjectRequest req = new JsonObjectRequest(url, requestBody, responseListenerToUseInsideTask, errorListenerToUseInsideTask);
+                                    if(TAG != null) req.setTag(TAG);
+
+                                    mQueue.add(req);
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+                            } else {
+                                Log.i("testing", "NetworkHandler.sendPostRequest(), failed to get idToken");
+                                // Handle error -> task.getException();
+                            }
+                        }
+                    });
+        } else {
+            requestBody.put("firebaseUserIdToken", PreferencesHelper.getFirebaseUserIdToken(mContext));
+            JsonObjectRequest req = new JsonObjectRequest(url, new JSONObject(requestBody), responseListener, errorListener);
+            if(TAG != null) req.setTag(TAG);
+
+            mQueue.add(req);
+        }
     }
 
     private void cancelRequests(String TAG) {
