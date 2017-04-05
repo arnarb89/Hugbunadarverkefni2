@@ -83,49 +83,46 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
             int senderId = Integer.parseInt(remoteMessage.getData().get("senderId"));
             int receiverId = Integer.parseInt(remoteMessage.getData().get("receiverId"));
 
+            ContactManager contactManager = new ContactManager(this);
+            MessageManager messageManager = new MessageManager(getBaseContext());
+
+            String senderUsername = contactManager.getContactById(senderId).getUsername();
+            Contact contact = new Contact(senderId, senderUsername, false);
+
             switch(remoteMessage.getData().get("messageType")) {
                 case chatMessageType: {
+                    Date sentDate = new Date(Long.parseLong(remoteMessage.getData().get("sentTime")));
                     String content = remoteMessage.getData().get("content");
-                    Date sentTime = new Date(Long.parseLong(remoteMessage.getData().get("sentTime")));
-                    Message message = new Message(content, senderId, receiverId, sentTime);
 
-                    MessageManager messageManager = new MessageManager(getBaseContext());
+                    Message message = new Message(content, senderId, receiverId, sentDate);
                     messageManager.addMessage(message);
 
                     Intent intent1 = new Intent("update_conversation");
-//                    intent1.putExtra("chatMessage", Message.toHashmap(message));
                     intent1.putExtra("content", message.getContent());
                     intent1.putExtra("senderId", message.getSenderId());
                     intent1.putExtra("receiverId", message.getReceiverId());
                     intent1.putExtra("sentDate", message.getSentDate().getTime());
                     LocalBroadcastManager.getInstance(getBaseContext()).sendBroadcast(intent1);
 
-                    ContactManager contactManager = new ContactManager(this);
-                    String username = contactManager.getContactById(message.getSenderId()).getUsername();
-
                     Intent intent2 = new Intent("update_recent_conversations");
                     LocalBroadcastManager.getInstance(getBaseContext()).sendBroadcast(intent2);
-                    
-                    sendNotificationMessage(remoteMessage.getNotification().getBody(), username, message.getSenderId());
+
+                    sendNotificationMessage(content, senderUsername, senderId);
                     break;
                 }
                 case friendRequestType: {
-                    String senderUsername = remoteMessage.getData().get("senderUsername");
-                    // TODO: send the friend request to the correct place in the database and probably notify the user somehow
-                    ContactManager contactManager = new ContactManager(getBaseContext());
-                    Contact contact = new Contact(senderId, senderUsername, false);
                     contactManager.storeFriendRequest(contact);
+
                     Intent intent3 = new Intent("update_new_friends");
                     LocalBroadcastManager.getInstance(getBaseContext()).sendBroadcast(intent3);
+
                     sendNotificationFriendRequest(senderUsername);
                     break;
                 }
                 case friendResponseType: {
-                    ContactManager contactManager = new ContactManager(getBaseContext());
-                    String username = remoteMessage.getData().get("accepterUsername");
-                    Contact contact = new Contact(senderId, username, false);
                     contactManager.storeContact(contact);
-                    sendNotificationFriendRequestResponse(username, senderId);
+
+                    sendNotificationFriendRequestResponse(senderUsername, senderId);
                     break;
                 }
                 default: {
