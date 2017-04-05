@@ -105,7 +105,8 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
                     Intent intent2 = new Intent("update_recent_conversations");
                     LocalBroadcastManager.getInstance(getBaseContext()).sendBroadcast(intent2);
-                    sendNotificationMessage(remoteMessage.getNotification().getBody(), username);
+                    
+                    sendNotificationMessage(remoteMessage.getNotification().getBody(), username, message.getSenderId());
                     break;
                 }
                 case friendRequestType: {
@@ -215,8 +216,9 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         notificationManager.notify(0 /* ID of notification */, notificationBuilder.build());
     }
 
-    private void sendNotificationMessage(String messageBody, String username) {
-        Intent intent = new Intent(this, RecentConversationsActivity.class);
+    private void sendNotificationMessage(String messageBody, String username, int userId) {
+        Intent intent = new Intent(this, ConversationActivity.class);
+        intent.putExtra("KEY_contactId", userId);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0 /* Request code */, intent,
                 PendingIntent.FLAG_ONE_SHOT);
