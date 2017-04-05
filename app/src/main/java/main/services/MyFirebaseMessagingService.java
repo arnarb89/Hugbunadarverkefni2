@@ -86,11 +86,12 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
             ContactManager contactManager = new ContactManager(this);
             MessageManager messageManager = new MessageManager(getBaseContext());
 
-            String senderUsername = contactManager.getContactById(senderId).getUsername();
-            Contact contact = new Contact(senderId, senderUsername, false);
+
+
 
             switch(remoteMessage.getData().get("messageType")) {
                 case chatMessageType: {
+                    String senderUsername = contactManager.getContactById(senderId).getUsername();
                     Date sentDate = new Date(Long.parseLong(remoteMessage.getData().get("sentTime")));
                     String content = remoteMessage.getData().get("content");
 
@@ -111,6 +112,8 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                     break;
                 }
                 case friendRequestType: {
+                    String senderUsername = remoteMessage.getData().get("senderUsername");
+                    Contact contact = new Contact(senderId, senderUsername, false);
                     contactManager.storeFriendRequest(contact);
 
                     Intent intent3 = new Intent("update_new_friends");
@@ -120,9 +123,11 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                     break;
                 }
                 case friendResponseType: {
+                    String username = remoteMessage.getData().get("accepterUsername");
+                    Contact contact = new Contact(senderId, username, false);
                     contactManager.storeContact(contact);
 
-                    sendNotificationFriendRequestResponse(senderUsername, senderId);
+                    sendNotificationFriendRequestResponse(username, senderId);
                     break;
                 }
                 default: {
