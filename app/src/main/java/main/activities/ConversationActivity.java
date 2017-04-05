@@ -133,7 +133,13 @@ public class ConversationActivity extends Activity {
         backButton.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View arg0) {
-                finish();
+                if(isTaskRoot()){
+                    Intent myIntent = new Intent(ConversationActivity.this, RecentConversationsActivity.class);
+                    ConversationActivity.this.startActivity(myIntent);
+                }else{
+                    finish();
+                }
+
             }
         });
     }
