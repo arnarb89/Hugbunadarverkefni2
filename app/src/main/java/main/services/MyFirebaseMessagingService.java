@@ -31,6 +31,8 @@ import com.google.firebase.messaging.RemoteMessage;
 
 import java.util.Date;
 
+import main.activities.ConversationActivity;
+import main.activities.NewFriendsActivity;
 import main.activities.RecentConversationsActivity;
 import main.managers.ContactManager;
 import main.managers.MessageManager;
@@ -98,8 +100,12 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                     intent1.putExtra("sentDate", message.getSentDate().getTime());
                     LocalBroadcastManager.getInstance(getBaseContext()).sendBroadcast(intent1);
 
+                    ContactManager contactManager = new ContactManager(this);
+                    String username = contactManager.getContactById(message.getSenderId()).getUsername();
+
                     Intent intent2 = new Intent("update_recent_conversations");
                     LocalBroadcastManager.getInstance(getBaseContext()).sendBroadcast(intent2);
+                    sendNotificationMessage(remoteMessage.getNotification().getBody(), username);
                     break;
                 }
                 case friendRequestType: {
@@ -108,6 +114,9 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                     ContactManager contactManager = new ContactManager(getBaseContext());
                     Contact contact = new Contact(senderId, senderUsername, false);
                     contactManager.storeFriendRequest(contact);
+                    Intent intent3 = new Intent("update_new_friends");
+                    LocalBroadcastManager.getInstance(getBaseContext()).sendBroadcast(intent3);
+                    sendNotificationFriendRequest(senderUsername);
                     break;
                 }
                 case friendResponseType: {
@@ -115,6 +124,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                     String username = remoteMessage.getData().get("accepterUsername");
                     Contact contact = new Contact(senderId, username, false);
                     contactManager.storeContact(contact);
+                    sendNotificationFriendRequestResponse(username, senderId);
                     break;
                 }
                 default: {
@@ -132,7 +142,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
         // Also if you intend on generating your own notifications as a result of a received FCM
         // message, here is where that should be initiated. See sendNotification method below.
-        sendNotification(remoteMessage.getNotification().getBody());
+        //sendNotification(remoteMessage.getNotification().getBody());
     }
     // [END receive_message]
 
@@ -152,6 +162,70 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                 .setSmallIcon(R.drawable.ic_stat_ic_notification)
                 .setContentTitle("FCM Message")
                 .setContentText(messageBody)
+                .setAutoCancel(true)
+                .setSound(defaultSoundUri)
+                .setContentIntent(pendingIntent);
+
+        NotificationManager notificationManager =
+                (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+
+        notificationManager.notify(0 /* ID of notification */, notificationBuilder.build());
+    }
+
+    private void sendNotificationFriendRequest(String username) {
+        Intent intent = new Intent(this, NewFriendsActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0 /* Request code */, intent,
+                PendingIntent.FLAG_ONE_SHOT);
+
+        Uri defaultSoundUri= RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+        NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this)
+                .setSmallIcon(R.drawable.ic_stat_ic_notification)
+                .setContentTitle("FireText")
+                .setContentText(username+" sent you a friend request.")
+                .setAutoCancel(true)
+                .setSound(defaultSoundUri)
+                .setContentIntent(pendingIntent);
+
+        NotificationManager notificationManager =
+                (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+
+        notificationManager.notify(0 /* ID of notification */, notificationBuilder.build());
+    }
+
+    private void sendNotificationFriendRequestResponse(String username, int userId) {
+        Intent intent = new Intent(this, ConversationActivity.class);
+        intent.putExtra("KEY_contactId", userId);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0 /* Request code */, intent,
+                PendingIntent.FLAG_ONE_SHOT);
+
+        Uri defaultSoundUri= RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+        NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this)
+                .setSmallIcon(R.drawable.ic_stat_ic_notification)
+                .setContentTitle("FireText")
+                .setContentText(username+" has accepted your friend request.")
+                .setAutoCancel(true)
+                .setSound(defaultSoundUri)
+                .setContentIntent(pendingIntent);
+
+        NotificationManager notificationManager =
+                (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+
+        notificationManager.notify(0 /* ID of notification */, notificationBuilder.build());
+    }
+
+    private void sendNotificationMessage(String messageBody, String username) {
+        Intent intent = new Intent(this, RecentConversationsActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0 /* Request code */, intent,
+                PendingIntent.FLAG_ONE_SHOT);
+
+        Uri defaultSoundUri= RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+        NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this)
+                .setSmallIcon(R.drawable.ic_stat_ic_notification)
+                .setContentTitle("FireText")
+                .setContentText(username+" says: "+messageBody)
                 .setAutoCancel(true)
                 .setSound(defaultSoundUri)
                 .setContentIntent(pendingIntent);

@@ -1,8 +1,12 @@
 package main.activities;
 
 import android.app.Activity;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
+import android.support.v4.content.LocalBroadcastManager;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -48,6 +52,8 @@ public class NewFriendsActivity extends Activity {
     private Timer timer = new Timer();
     private final long DELAY = 1000; // in ms
 
+    NewFriendsRequestsAdapter newFriendsRequestsAdapter;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -69,8 +75,11 @@ public class NewFriendsActivity extends Activity {
         addContactButton.setTextColor(getResources().getColor(R.color.darkred));
 
         // Populate Recent Conversations list with items
-        NewFriendsRequestsAdapter newFriendsRequestsAdapter = new NewFriendsRequestsAdapter(contactsManager.getReceivedFriendRequests(), this.getBaseContext());
+        newFriendsRequestsAdapter = new NewFriendsRequestsAdapter(contactsManager.getReceivedFriendRequests(), this.getBaseContext());
         listView.setAdapter(newFriendsRequestsAdapter);
+
+        LocalBroadcastManager.getInstance(getBaseContext()).registerReceiver(mMessageReceiver,
+                new IntentFilter("update_new_friends"));
 
 
         addContactButton.setOnClickListener(new View.OnClickListener() {
@@ -204,5 +213,15 @@ public class NewFriendsActivity extends Activity {
             }
         });
     }
+
+    public BroadcastReceiver mMessageReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (intent != null ) {
+                newFriendsRequestsAdapter = new NewFriendsRequestsAdapter(contactsManager.getReceivedFriendRequests(), getBaseContext());
+                listView.setAdapter(newFriendsRequestsAdapter);
+            }
+        }
+    };
 }
 
