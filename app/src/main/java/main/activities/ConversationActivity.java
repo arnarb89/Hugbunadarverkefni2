@@ -73,7 +73,7 @@ public class ConversationActivity extends Activity {
 
         // Populate the conversation list with items
         //final ConversationAdapter conversationAdapter = new ConversationAdapter(previousMessages, this.getBaseContext());
-        conversationAdapter = new ConversationAdapter(previousMessages, ConversationActivity.this);
+        conversationAdapter = new ConversationAdapter(previousMessages, ConversationActivity.this, IdOfWhoYouAreTalkingTo, yourId);
         conversationListView.setAdapter(conversationAdapter);
         conversationAdapter.notifyDataSetChanged();
 
