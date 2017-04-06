@@ -1,8 +1,12 @@
 package main.activities;
 
 import android.app.Activity;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
+import android.support.v4.content.LocalBroadcastManager;
 import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
@@ -12,6 +16,7 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.PopupMenu;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import main.adapters.ContactsListAdapter;
@@ -36,6 +41,8 @@ public class BlockedContactsActivity extends Activity {
 
     ContactsListAdapter contactsListAdapter;
 
+    final List<Contact> contactListData = new ArrayList<Contact>();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -52,7 +59,10 @@ public class BlockedContactsActivity extends Activity {
         blockedListButton = (Button) findViewById(R.id.btnBlockedContacts);
         signOutButton = (Button) findViewById(R.id.btnSignOut);
 
-        final List<Contact> contactListData = contactManager.getBlockedContacts();
+        contactListData.addAll(contactManager.getBlockedContacts());
+
+        LocalBroadcastManager.getInstance(getBaseContext()).registerReceiver(contactDeletionReceiver,
+                new IntentFilter("update_blocked_contacts_on_delete"));
 
 
         // Populate blocked contact list with items
@@ -129,4 +139,15 @@ public class BlockedContactsActivity extends Activity {
             }
         });
     }
+
+    public BroadcastReceiver contactDeletionReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (intent != null ) {
+                contactListData.clear();
+                contactListData.addAll(contactManager.getBlockedContacts());
+                contactsListAdapter.notifyDataSetChanged();
+            }
+        }
+    };
 }

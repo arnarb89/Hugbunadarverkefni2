@@ -133,6 +133,18 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                     String deleterUsername = remoteMessage.getData().get("senderUsername");
                     Contact contact = new Contact(senderId, deleterUsername, false);
                     contactManager.deleteContact(contact);
+
+                    Intent intent2 = new Intent("update_recent_conversations");
+                    LocalBroadcastManager.getInstance(getBaseContext()).sendBroadcast(intent2);
+
+                    Intent intent3 = new Intent("update_conversation_on_delete");
+                    LocalBroadcastManager.getInstance(getBaseContext()).sendBroadcast(intent3);
+
+                    Intent intent4 = new Intent("update_contacts_on_delete");
+                    LocalBroadcastManager.getInstance(getBaseContext()).sendBroadcast(intent4);
+
+                    Intent intent5 = new Intent("update_blocked_contacts_on_delete");
+                    LocalBroadcastManager.getInstance(getBaseContext()).sendBroadcast(intent5);
                     break;
                 }
                 default: {
