@@ -7,3 +7,5 @@
 /build
 /captures
 .externalNativeBuild
+hugbv2_release_keystore
+keystore.properties

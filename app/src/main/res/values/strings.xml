@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">CloudMessagingTest2</string>
+    <string name="search_contacts_placeholder_text">Search Your Contact List</string>
 </resources>
