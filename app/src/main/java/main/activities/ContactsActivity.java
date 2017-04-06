@@ -87,7 +87,7 @@ public class ContactsActivity extends Activity {
                             contactListData.remove(position);
                             contactsListAdapter.notifyDataSetChanged();
                         }else{
-                            contactManager.deleteContact(contactListData.get(position));
+                            contactManager.unfriendContact(contactListData.get(position));
                             contactListData.remove(position);
                             contactsListAdapter.notifyDataSetChanged();
                         }

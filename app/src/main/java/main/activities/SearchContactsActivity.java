@@ -91,7 +91,7 @@ public class SearchContactsActivity extends Activity {
                                 if(item.getItemId()==R.id.block_contact){
                                     contactManager.blockContact(contactListData.get(position));
                                 }else{
-                                    contactManager.deleteContact(contactListData.get(position));
+                                    contactManager.unfriendContact(contactListData.get(position));
                                 }
                                 return true;
                             }
