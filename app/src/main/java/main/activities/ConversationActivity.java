@@ -82,6 +82,9 @@ public class ConversationActivity extends Activity {
         LocalBroadcastManager.getInstance(getBaseContext()).registerReceiver(mMessageReceiver,
                 new IntentFilter("update_conversation"));
 
+        LocalBroadcastManager.getInstance(getBaseContext()).registerReceiver(contactDeletionReceiver,
+                new IntentFilter("update_conversation_on_delete"));
+
 
         sendMessageButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -164,6 +167,21 @@ public class ConversationActivity extends Activity {
                 Message message = new Message(content,senderId, receiverId, new Date(sentDate) );
                 previousMessages.add(0, message);
                 conversationAdapter.notifyDataSetChanged();
+            }
+        }
+    };
+
+    public BroadcastReceiver contactDeletionReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (intent != null ) {
+
+                if(isTaskRoot()){
+                    Intent myIntent = new Intent(ConversationActivity.this, RecentConversationsActivity.class);
+                    ConversationActivity.this.startActivity(myIntent);
+                }else{
+                    finish();
+                }
             }
         }
     };
