@@ -48,6 +48,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
     private static final String chatMessageType = "chatMessage";
     private static final String friendRequestType = "friendRequest";
     private static final String friendResponseType = "friendResponse";
+    private static final String deleteRequestType = "deleteRequest";
 
 
     /**
@@ -87,8 +88,6 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
             MessageManager messageManager = new MessageManager(getBaseContext());
 
 
-
-
             switch(remoteMessage.getData().get("messageType")) {
                 case chatMessageType: {
                     String senderUsername = contactManager.getContactById(senderId).getUsername();
@@ -123,11 +122,17 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                     break;
                 }
                 case friendResponseType: {
-                    String username = remoteMessage.getData().get("accepterUsername");
+                    String username = remoteMessage.getData().get("senderUsername");
                     Contact contact = new Contact(senderId, username, false);
                     contactManager.storeContact(contact);
 
                     sendNotificationFriendRequestResponse(username, senderId);
+                    break;
+                }
+                case deleteRequestType: {
+                    String deleterUsername = remoteMessage.getData().get("senderUsername");
+                    Contact contact = new Contact(senderId, deleterUsername, false);
+                    contactManager.deleteContact(contact);
                     break;
                 }
                 default: {
