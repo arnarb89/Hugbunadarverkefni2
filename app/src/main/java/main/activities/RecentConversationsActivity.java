@@ -118,11 +118,11 @@ public class RecentConversationsActivity extends Activity {
                             }
                         }else{
                             if(recentConversationsListData.get(position).getReceiverId()==yourId) {
-                                contactsManager.deleteContact(contactsManager.getContactById(recentConversationsListData.get(position).getSenderId()));
+                                contactsManager.unfriendContact(contactsManager.getContactById(recentConversationsListData.get(position).getSenderId()));
                                 recentConversationsListData.remove(position);
                                 recentConversationsAdapter.notifyDataSetChanged();
                             }else{
-                                contactsManager.deleteContact(contactsManager.getContactById(recentConversationsListData.get(position).getReceiverId()));
+                                contactsManager.unfriendContact(contactsManager.getContactById(recentConversationsListData.get(position).getReceiverId()));
                                 recentConversationsListData.remove(position);
                                 recentConversationsAdapter.notifyDataSetChanged();
                             }

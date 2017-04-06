@@ -71,6 +71,13 @@ public class ContactManager {
         mDbHelper.deleteContact(contact);
         MessageDatabaseHelper msgDbHelper = new MessageDatabaseHelper(mContext);
         msgDbHelper.deleteMessageHistory(contact);
+        //mNetworkHandler.deleteContact(contact);
+    }
+
+    public void unfriendContact(Contact contact) {
+        mDbHelper.deleteContact(contact);
+        MessageDatabaseHelper msgDbHelper = new MessageDatabaseHelper(mContext);
+        msgDbHelper.deleteMessageHistory(contact);
         mNetworkHandler.deleteContact(contact);
     }
 

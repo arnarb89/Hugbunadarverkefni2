@@ -114,7 +114,7 @@ public class ConversationActivity extends Activity {
                             contactManager.blockContact(contactManager.getContactById(IdOfWhoYouAreTalkingTo));
                             finish();
                         }else{
-                            contactManager.deleteContact(contactManager.getContactById(IdOfWhoYouAreTalkingTo));
+                            contactManager.unfriendContact(contactManager.getContactById(IdOfWhoYouAreTalkingTo));
                             finish();
                         }
 
