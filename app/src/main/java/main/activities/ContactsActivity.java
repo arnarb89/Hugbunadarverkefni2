@@ -34,6 +34,8 @@ public class ContactsActivity extends Activity {
     Button blockedListButton;
     Button signOutButton;
 
+    ContactsListAdapter contactsListAdapter;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -54,7 +56,6 @@ public class ContactsActivity extends Activity {
 
 
         // Populate contact list with items
-        ContactsListAdapter contactsListAdapter;
         contactsListAdapter = new ContactsListAdapter(contactListData, this.getBaseContext());
         listView.setAdapter(contactsListAdapter);
 
@@ -83,8 +84,12 @@ public class ContactsActivity extends Activity {
 
                         if(item.getItemId()==R.id.block_contact){
                             contactManager.blockContact(contactListData.get(position));
+                            contactListData.remove(position);
+                            contactsListAdapter.notifyDataSetChanged();
                         }else{
                             contactManager.deleteContact(contactListData.get(position));
+                            contactListData.remove(position);
+                            contactsListAdapter.notifyDataSetChanged();
                         }
 
                         return true;
