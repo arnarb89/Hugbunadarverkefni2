@@ -104,7 +104,7 @@
         android:id="@+id/btnSearchContacts"
         android:layout_width="fill_parent"
         android:layout_height="50dip"
-        android:hint="Find a contact"
+        android:hint="@string/search_contacts_placeholder_text"
         android:inputType="text"
         android:background="@drawable/searchbar"/>
 
